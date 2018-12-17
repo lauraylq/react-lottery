@@ -70,7 +70,8 @@
     "webpack": "^4.20.2",
     "webpack-merge": "^4.1.4",
     "whatwg-fetch": "^3.0.0",
-    "wl-bridge": "^1.0.5"
+    "wl-bridge": "^1.0.5",
+    "xlsx": "^0.14.1"
   },
   "babel": {
     "plugins": [
