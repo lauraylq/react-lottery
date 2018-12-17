@@ -1,0 +1,79 @@
+@import "~antd/dist/antd.less";
+@import "./black.less"; 
+
+.logo {
+  height: 64px;
+  color: #fff;
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  line-height: 64px;
+  background-color: @primary-color;
+}
+.breadCrumb{
+  padding: 10px;
+}
+.ant-menu {
+  background-color: @menu-bg-color;
+  color: @primary-color;
+  .ant-menu-submenu>.ant-menu {
+    background-color: @menu-selected-bg-color;
+  }
+  &:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background-color: @menu-selected-bg-color !important;
+  }
+}
+.ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left {
+  border: none;
+}
+.ant-menu-inline .ant-menu-item, .ant-menu-inline .ant-menu-submenu-title {
+  width: calc(100% + 0px)
+}
+.ant-layout-sider-trigger {
+  background: @primary-color;
+}
+.ant-breadcrumb>span:last-child .ant-breadcrumb-separator {
+  display: none;
+}
+.ant-layout-footer {
+  padding: 0;
+}
+.ant-menu-item {
+  color: @primary-color;
+}
+.ant-menu-item-selected {
+  color: #fff;
+}
+///////////////////////// common /////////////////////////
+.sofa-modal-form {
+  padding-left: 30px;
+  padding-right: 50px;
+}
+.avatar-style {
+  margin: 0px 0 0px 15px;
+  transform: translateY(3px) !important;
+}
+///////////////////////// containers/ToolbarTableModal /////////////////////////
+
+///////////////////////// containers/ToolbarTableModal /////////////////////////
+
+@media print {
+	body * {
+		visibility: hidden;
+	}
+
+	/* 隐藏 chrome 浏览器下的 header, footer */
+	@page { 
+		margin: 0; 
+	}
+
+	#section-to-print, #section-to-print * {
+		visibility: visible;
+	}
+
+	#section-to-print {
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+}
