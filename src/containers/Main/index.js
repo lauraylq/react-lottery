@@ -78,7 +78,39 @@ class Main extends React.Component {
     if (!reg.test(history.location.pathname)) {
       this.props.getLoginUserInfo();
     }
+    this.init();
   }
+
+  init = () => {
+    const { DBInfo } = commonConf;
+    if (window.indexedDB) {
+      const request = window.indexedDB.open(DBInfo.DBName, DBInfo.version);
+      request.onsuccess = (event) => {
+        window.db = event.target.result;
+      };
+
+      request.onupgradeneeded = (event) => {
+        window.db = event.target.result;
+        let objectStore;
+        if (!window.db.objectStoreNames.contains('awards')) {
+          objectStore = window.db.createObjectStore('awards', { keyPath: 'id' });
+          objectStore.createIndex('type', 'type', { unique: true });
+          objectStore.createIndex('name', 'name', { unique: false });
+          objectStore.createIndex('count', 'count', { unique: false });
+          objectStore.createIndex('userjson', 'userjson', { unique: false });
+        }
+        if (!window.db.objectStoreNames.contains('awards')) {
+          objectStore = window.db.createObjectStore('user', { keyPath: 'id' });
+          objectStore.createIndex('name', 'name', { unique: false });
+          objectStore.createIndex('sex', 'sex', { unique: false });
+        }
+      };
+
+      request.onerror = (event) => {
+        console.log(`打开失败,错误号：${event.target.errorCode}`);
+      };
+    }
+  };
 
   onCollapse = (collapsed) => {
     this.setState({ collapsed });

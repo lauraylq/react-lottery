@@ -1,14 +1,7 @@
 const menu = [
   {
-    key: 'homePage',
-    icon: 'home',
-  },
-  {
-    key: 'system',
+    key: 'userManage',
     icon: 'setting',
-    children: [
-      { key: 'userManage' },
-    ],
   },
 ];
 export default menu;

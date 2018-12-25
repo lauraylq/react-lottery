@@ -16,6 +16,8 @@ import reducer from './reducer';
 import saga from './saga';
 
 import Toolbar from './modules/FunctionsAndSearchToolbar';
+import UploadUserData from './modules/UploadUserData';
+
 // import Table from './modules/DataTable';
 // import Modal from './modules/CreateAndEditModal';
 // import ResetPasswordModal from './modules/ResetPasswordModal';
@@ -31,6 +33,7 @@ class UserManage extends React.Component {
     return (
       <div>
         <Toolbar />
+        <UploadUserData />
         {/* <Table />
         <Modal />
         <ResetPasswordModal /> */}
