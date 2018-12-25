@@ -1,8 +1,3 @@
-/*
- * SystemManage Messages
- *
- * This contains all the text for the SystemManage component.
- */
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
@@ -271,5 +266,9 @@ export default defineMessages({
   toolbarTableModal: {
     id: 'sofa.config.toolbarTableModal',
     defaultMessage: '工具箱-表-弹窗',
+  },
+  ruleManage: {
+    id: 'sofa.config.ruleManage',
+    defaultMessage: '规则管理',
   },
 });

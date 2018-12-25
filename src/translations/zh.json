@@ -3,6 +3,7 @@
   "sofa.config.homePage": "首页",
   "sofa.config.system": "系统管理",
   "sofa.config.userManage": "用户管理",
+  "sofa.config.ruleManage": "规则管理",
   "sofa.config.authManage": "权限管理",
   "sofa.config.authGroupManage": "权限组管理",
   "sofa.config.example": "通用示例",
