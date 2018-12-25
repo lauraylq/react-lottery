@@ -1,9 +1,5 @@
 const menu = [
   {
-    key: 'userManage',
-    icon: 'setting',
-  },
-  {
     key: 'ruleManage',
     icon: 'setting',
   },
