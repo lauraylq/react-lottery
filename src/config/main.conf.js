@@ -8,11 +8,11 @@ const conf = {
     // indexDB名称
     DBName: 'sftc-lottery',
     // indexDB版本
-    version: '4',
+    version: '5',
     // indexDB存储表名称
     storeName: {
       user: 'user', // 用户
-      award: 'type', // 奖项
+      award: 'award', // 奖项
     },
     // 校验数据--等待timeout执行
     timeout: 25000,

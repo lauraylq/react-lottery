@@ -14,7 +14,7 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
-  userManage: {
+  ruleManage: {
     account: {
       id: 'sofa.containers.RuleManage.account',
       defaultMessage: '账号',

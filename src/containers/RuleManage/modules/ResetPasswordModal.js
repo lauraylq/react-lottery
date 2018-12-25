@@ -21,8 +21,6 @@ import connectFactory from 'utils/connectFactory';
 import { CREATE, EDIT } from 'utils/constants';
 import { injectIntl, intlShape } from 'react-intl';
 import commonMessages from 'utils/commonMessages';
-import DataAuthSelect from './DataAuthSelect';
-import OperationAuthSelect from './OperationAuthSelect';
 
 import messages from '../messages';
 
@@ -111,7 +109,7 @@ class ResetPasswordModal extends React.PureComponent {
       <div>
         <Modal
           width={700}
-          title={intl.formatMessage(messages.userManage.resetPassword)}
+          title={intl.formatMessage(messages.ruleManage.resetPassword)}
           visible={entityModal.show}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
@@ -124,7 +122,7 @@ class ResetPasswordModal extends React.PureComponent {
           >
             <FormItem
               {...formItemLayout}
-              label={intl.formatMessage(messages.userManage.newPassword)}
+              label={intl.formatMessage(messages.ruleManage.newPassword)}
             >
               {getFieldDecorator('new_password', {
                 initialValue: '',
@@ -137,7 +135,7 @@ class ResetPasswordModal extends React.PureComponent {
             </FormItem>
             <FormItem
               {...formItemLayout}
-              label={intl.formatMessage(messages.userManage.confirmNewPassword)}
+              label={intl.formatMessage(messages.ruleManage.confirmNewPassword)}
             >
               {getFieldDecorator('confirm_new_password', {
                 initialValue: '',

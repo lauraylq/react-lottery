@@ -67,7 +67,7 @@ class DataTable extends React.PureComponent {
 
   // 实例变量，挂载在实例上，如若在此变量中未使用this，也可声明为静态变量
   columns = [{
-    title: this.props.intl.formatMessage(messages.userManage.account),
+    title: this.props.intl.formatMessage(messages.ruleManage.account),
     dataIndex: 'id',
     key: 'id',
   }, {
@@ -75,12 +75,12 @@ class DataTable extends React.PureComponent {
     dataIndex: 'name',
     key: 'name',
   }, {
-    title: this.props.intl.formatMessage(messages.userManage.accountStatus),
+    title: this.props.intl.formatMessage(messages.ruleManage.accountStatus),
     dataIndex: 'accountStatus',
     key: 'accountStatus',
     render: value => (
       <span>
-        {value && this.props.intl.formatMessage(messages.userManage.accountStatusMap[value])}
+        {value && this.props.intl.formatMessage(messages.ruleManage.accountStatusMap[value])}
       </span>
     ),
   }, {
@@ -90,10 +90,10 @@ class DataTable extends React.PureComponent {
     render: (value, row) => (
       <div>
         <TableButton onClick={() => this.handleClickEdit(row)}>
-          {this.props.intl.formatMessage(messages.userManage.modifyInfo)}
+          {this.props.intl.formatMessage(messages.ruleManage.modifyInfo)}
         </TableButton>
         <TableButton onClick={() => this.handleResetPassword(row)}>
-          {this.props.intl.formatMessage(messages.userManage.resetPassword)}
+          {this.props.intl.formatMessage(messages.ruleManage.resetPassword)}
         </TableButton>
       </div>
     ),

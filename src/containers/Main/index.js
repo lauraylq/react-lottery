@@ -92,12 +92,13 @@ class Main extends React.Component {
       request.onupgradeneeded = (event) => {
         window.db = event.target.result;
         let objectStore;
-        if (!window.db.objectStoreNames.contains('awards')) {
-          objectStore = window.db.createObjectStore('awards', { keyPath: 'id' });
-          objectStore.createIndex('type', 'type', { unique: true });
-          objectStore.createIndex('name', 'name', { unique: false });
-          objectStore.createIndex('count', 'count', { unique: false });
-          objectStore.createIndex('userjson', 'userjson', { unique: false });
+        if (!window.db.objectStoreNames.contains('award')) {
+          objectStore = window.db.createObjectStore('award', { autoIncrement: true });
+          objectStore.createIndex('award_name', 'award_name', { unique: true });
+          objectStore.createIndex('award_content', 'award_content', { unique: false });
+          objectStore.createIndex('award_num', 'award_num', { unique: false });
+          objectStore.createIndex('single_num', 'single_num', { unique: false });
+          objectStore.createIndex('sex', 'sex', { unique: false });
         }
         if (!window.db.objectStoreNames.contains('awards')) {
           objectStore = window.db.createObjectStore('user', { keyPath: 'id' });
@@ -146,7 +147,7 @@ class Main extends React.Component {
             collapsed={collapsed}
             onCollapse={this.onCollapse}
           >
-            <div className="logo">Logo</div>
+            <div className="logo">PRIZE~</div>
             <Menu
               selectedKeys={selectedKeys}
               openKeys={openKeys}

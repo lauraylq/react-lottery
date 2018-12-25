@@ -14,6 +14,7 @@ import {
   Form,
   Input,
   Select,
+  InputNumber,
 } from 'antd';
 
 import { createStructuredSelector } from 'reselect';
@@ -21,8 +22,8 @@ import connectFactory from 'utils/connectFactory';
 import { CREATE, EDIT } from 'utils/constants';
 import { injectIntl, intlShape } from 'react-intl';
 import commonMessages from 'utils/commonMessages';
-import DataAuthSelect from './DataAuthSelect';
-import OperationAuthSelect from './OperationAuthSelect';
+import commonConf from 'config/main.conf';
+import { insert } from 'utils/store';
 
 import messages from '../messages';
 
@@ -74,10 +75,17 @@ class CreateAndEditModal extends React.PureComponent {
   handleOk = (e) => {
     e.preventDefault();
     const { type } = this.props.entityModal;
+    const { DBInfo } = commonConf;
     this.props.form.validateFields((err, values) => {
       if (!err) {
         if (type === CREATE) {
-          this.props.postCreateEntity(values);
+          insert(DBInfo.DBName, DBInfo.storeName.award, values).then((res) => {
+            this.props.updateEntityModal({
+              type: CREATE,
+              show: false,
+              data: {},
+            });
+          });
         } else if (type === EDIT) {
           this.props.postEditEntity(values);
         }
@@ -115,8 +123,8 @@ class CreateAndEditModal extends React.PureComponent {
         <Modal
           width={700}
           title={isModify(type)
-            ? intl.formatMessage(messages.userManage.createUser)
-            : intl.formatMessage(messages.userManage.editUser)}
+            ? '修改规则'
+            : '创建规则'}
           visible={entityModal.show}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
@@ -129,12 +137,12 @@ class CreateAndEditModal extends React.PureComponent {
           >
             <FormItem
               {...formItemLayout}
-              label={intl.formatMessage(messages.userManage.account)}
+              label="奖项名称"
             >
-              {getFieldDecorator('id', {
-                initialValue: data.id || '',
+              {getFieldDecorator('award_name', {
+                initialValue: data.award_name || '',
                 rules: [{
-                  required: true, message: 'Please input your id!',
+                  required: true, message: '该项为必填项!',
                 }],
               })(
                 <Input />,
@@ -142,36 +150,52 @@ class CreateAndEditModal extends React.PureComponent {
             </FormItem>
             <FormItem
               {...formItemLayout}
-              label={intl.formatMessage(commonMessages.name)}
+              label="奖品名称"
             >
-              {getFieldDecorator('name', {
-                initialValue: data.name || '',
-                rules: [{ required: true, message: 'Please input your name!' }],
+              {getFieldDecorator('award_content', {
+                initialValue: data.award_content || '',
+                rules: [{ required: true, message: '该项为必填项!' }],
               })(
                 <Input />,
               )}
             </FormItem>
             <FormItem
               {...formItemLayout}
-              label={intl.formatMessage(messages.userManage.accountStatus)}
+              label="奖项人数"
             >
-              {getFieldDecorator('accountStatus', {
-                initialValue: data.accountStatus || '',
-                rules: [{ required: true, message: 'Please input your accountStatus!' }],
+              {getFieldDecorator('award_num', {
+                initialValue: data.award_num || '',
+                rules: [{ required: true, message: '该项为必填项!' }],
+              })(
+                <InputNumber min={0} />,
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="单次抽取"
+            >
+              {getFieldDecorator('single_num', {
+                initialValue: data.single_num || '',
+                rules: [{ required: true, message: '该项为必填项!' }],
+              })(
+                <InputNumber min={0} />,
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="性别"
+            >
+              {getFieldDecorator('sex', {
+                initialValue: data.sex || '',
+                rules: [{ required: true, message: '该项为必填项!' }],
               })(
                 <Select>
-                  {
-                    Object.keys(messages.userManage.accountStatusMap).map(key => (
-                      <Option value={key} key={key}>
-                        {intl.formatMessage(messages.userManage.accountStatusMap[key])}
-                      </Option>
-                    ))
-                  }
+                  <Option value="0">全部</Option>
+                  <Option value="1">男</Option>
+                  <Option value="2">女</Option>
                 </Select>,
               )}
             </FormItem>
-            <DataAuthSelect />
-            <OperationAuthSelect />
           </Form>
         </Modal>
       </div>);

@@ -92,12 +92,12 @@ class Toolbar extends React.Component {
     return (
       <ToolbarContainer>
         <FunctionButtonsContainer>
-          <Button type="primary" onClick={this.handleClickCreate}>{intl.formatMessage(messages.userManage.createUser)}</Button>
+          <Button type="primary" onClick={this.handleClickCreate}>创建规则</Button>
         </FunctionButtonsContainer>
         <Form>
           <Row gutter={24}>
             <Col span={6}>
-              <Form.Item label={intl.formatMessage(messages.userManage.account)}>
+              <Form.Item label={intl.formatMessage(messages.ruleManage.account)}>
                 {getFieldDecorator('account', {
                   initialValue: searchCondition.account || '',
                 })(
@@ -115,7 +115,7 @@ class Toolbar extends React.Component {
               </Form.Item>
             </Col>
             <Col span={6}>
-              <Form.Item label={intl.formatMessage(messages.userManage.accountStatus)}>
+              <Form.Item label={intl.formatMessage(messages.ruleManage.accountStatus)}>
                 {
                   getFieldDecorator('status', {
                     initialValue: searchCondition.status,
@@ -123,9 +123,9 @@ class Toolbar extends React.Component {
                     <Select>
                       <Option value="">{intl.formatMessage(commonMessages.all)}</Option>
                       {
-                        Object.keys(messages.userManage.accountStatusMap).map(key => (
+                        Object.keys(messages.ruleManage.accountStatusMap).map(key => (
                           <Option value={key} key={key}>
-                            {intl.formatMessage(messages.userManage.accountStatusMap[key])}
+                            {intl.formatMessage(messages.ruleManage.accountStatusMap[key])}
                           </Option>
                         ))
                       }
