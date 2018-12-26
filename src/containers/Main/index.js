@@ -100,7 +100,7 @@ class Main extends React.Component {
           objectStore.createIndex('single_num', 'single_num', { unique: false });
           objectStore.createIndex('sex', 'sex', { unique: false });
         }
-        if (!window.db.objectStoreNames.contains('awards')) {
+        if (!window.db.objectStoreNames.contains('user')) {
           objectStore = window.db.createObjectStore('user', { keyPath: 'id' });
           objectStore.createIndex('name', 'name', { unique: false });
           objectStore.createIndex('sex', 'sex', { unique: false });

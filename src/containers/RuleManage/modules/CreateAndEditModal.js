@@ -23,7 +23,7 @@ import { CREATE, EDIT } from 'utils/constants';
 import { injectIntl, intlShape } from 'react-intl';
 import commonMessages from 'utils/commonMessages';
 import commonConf from 'config/main.conf';
-import { insert } from 'utils/store';
+import { insert, getData, getDataByKey } from 'utils/store';
 
 import messages from '../messages';
 
@@ -86,6 +86,9 @@ class CreateAndEditModal extends React.PureComponent {
               data: {},
             });
           });
+          // getDataByKey(DBInfo.DBName, DBInfo.storeName.award, 1).then((res) => {
+          //   console.log('res: ', res);
+          // });
         } else if (type === EDIT) {
           this.props.postEditEntity(values);
         }
