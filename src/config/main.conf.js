@@ -17,6 +17,11 @@ const conf = {
     // 校验数据--等待timeout执行
     timeout: 25000,
   },
+  sexMap: {
+    0: '全部',
+    1: '男',
+    2: '女',
+  },
 };
 
 export default conf;

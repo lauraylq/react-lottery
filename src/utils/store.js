@@ -46,7 +46,7 @@ export function getDataByKey(db, storeName, key) {
       if (request.result) {
         resolve(request.result);
       } else {
-        alert('数据插入失败');
+        alert('数据获取失败');
       }
     };
     // 2.2、当事务中出现错误时触发，默认的处理方式为回滚事务；

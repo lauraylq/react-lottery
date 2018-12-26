@@ -19,8 +19,9 @@ import TableButton from 'components/TableButton';
 import { injectIntl, intlShape } from 'react-intl';
 import commonMessages from 'utils/commonMessages';
 import { EDIT } from 'utils/constants';
+import commonConf from 'config/main.conf';
+import { getData } from 'utils/store';
 
-import messages from '../messages';
 import { NAMESPACE } from '../constants';
 import { getDataList, updateEntityModal, updateResetPasswordModal } from '../actions';
 import { selectPagination, selectSearchCondition, selectTableData } from '../selectors';
@@ -50,37 +51,53 @@ const withConnect = connectFactory(NAMESPACE);
   },
 )
 class DataTable extends React.PureComponent {
+  state = {
+    dateList: [],
+  };
+
   // 静态变量，propTypes一定是静态变量，是挂载在类上的；
   static propTypes = {
-    tableData: PropTypes.array.isRequired,
-    pagination: PropTypes.object.isRequired,
-    getDataList: PropTypes.func.isRequired,
     updateEntityModal: PropTypes.func.isRequired,
-    updateResetPasswordModal: PropTypes.func.isRequired,
-    searchCondition: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
     intl: intlShape.isRequired,
   };
+
+  componentDidMount() {
+    const { DBInfo } = commonConf;
+    getData(DBInfo.DBName, DBInfo.storeName.award).then((res) => {
+      this.setState({
+        dateList: res,
+      });
+    });
+  }
 
   // 静态方法，类的不使用this的函数，一般声明为静态方法；
   showTotal = total => (this.props.intl.formatMessage(commonMessages.total, { total }));
 
   // 实例变量，挂载在实例上，如若在此变量中未使用this，也可声明为静态变量
   columns = [{
-    title: this.props.intl.formatMessage(messages.ruleManage.account),
-    dataIndex: 'id',
-    key: 'id',
+    title: '奖项名称',
+    dataIndex: 'award_name',
+    key: 'award_name',
   }, {
-    title: this.props.intl.formatMessage(commonMessages.name),
-    dataIndex: 'name',
-    key: 'name',
+    title: '奖品名称',
+    dataIndex: 'award_content',
+    key: 'award_content',
   }, {
-    title: this.props.intl.formatMessage(messages.ruleManage.accountStatus),
-    dataIndex: 'accountStatus',
-    key: 'accountStatus',
+    title: '奖项人数',
+    dataIndex: 'award_num',
+    key: 'award_num',
+  }, {
+    title: '单次抽取',
+    dataIndex: 'single_num',
+    key: 'single_num',
+  }, {
+    title: '性别',
+    dataIndex: 'sex',
+    key: 'sex',
     render: value => (
       <span>
-        {value && this.props.intl.formatMessage(messages.ruleManage.accountStatusMap[value])}
+        {value && commonConf.sexMap[value]}
       </span>
     ),
   }, {
@@ -90,10 +107,7 @@ class DataTable extends React.PureComponent {
     render: (value, row) => (
       <div>
         <TableButton onClick={() => this.handleClickEdit(row)}>
-          {this.props.intl.formatMessage(messages.ruleManage.modifyInfo)}
-        </TableButton>
-        <TableButton onClick={() => this.handleResetPassword(row)}>
-          {this.props.intl.formatMessage(messages.ruleManage.resetPassword)}
+          修改规则
         </TableButton>
       </div>
     ),
@@ -107,40 +121,19 @@ class DataTable extends React.PureComponent {
     });
   }
 
-  handleResetPassword(data) {
-    this.props.updateResetPasswordModal({
-      show: true,
-      data,
-    });
-  }
-
-  // 实例变量/方法，使用了箭头函数做this的绑定，若无特殊传参，在render函数中优先使用这种方式进行函数声明；
-  handlePageChange = (page) => {
-    const { searchCondition, pagination } = this.props;
-
-    this.props.getDataList({
-      ...searchCondition,
-      perpage: pagination.pageSize,
-      page,
-    });
-  }
-
   render() {
-    const { tableData, pagination, loading } = this.props;
+    const { loading } = this.props;
+    const { dateList } = this.state;
     return (
       <TableContainer>
         <Table
           bordered
           loading={loading}
           columns={this.columns}
-          dataSource={tableData}
+          dataSource={dateList}
           rowKey="id"
           pagination={{
-            current: pagination.page,
-            total: pagination.total,
-            pageSize: pagination.pageSize,
-            showTotal: this.showTotal,
-            onChange: this.handlePageChange,
+            pageSize: 20,
           }}
         />
       </TableContainer>

@@ -8,7 +8,6 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
-import commonConf from 'config/main.conf';
 
 import {
   Form,
@@ -25,6 +24,8 @@ import ToolbarContainer from 'components/ToolbarContainer';
 import FunctionButtonsContainer from 'components/FunctionButtonsContainer';
 import { injectIntl, intlShape } from 'react-intl';
 import commonMessages from 'utils/commonMessages';
+import commonConf from 'config/main.conf';
+
 import messages from '../messages';
 
 import { NAMESPACE } from '../constants';
@@ -56,12 +57,7 @@ class Toolbar extends React.Component {
   };
 
   componentDidMount() {
-    const { searchCondition } = this.props;
-    this.props.getDataList({
-      ...searchCondition,
-      page: 1,
-      perpage: commonConf.table.defaultPageSize,
-    });
+
   }
 
   handleSearch = () => {

@@ -25,8 +25,6 @@ import commonMessages from 'utils/commonMessages';
 import commonConf from 'config/main.conf';
 import { insert, getData, getDataByKey } from 'utils/store';
 
-import messages from '../messages';
-
 import { NAMESPACE } from '../constants';
 import { updateEntityModal, postCreateEntity, postEditEntity } from '../actions';
 import { selectEntityModal, selectEntityModalType } from '../selectors';
@@ -37,7 +35,7 @@ const FormItem = Form.Item;
 const { Option } = Select;
 
 function isModify(type) {
-  return type === 'modify';
+  return type === 'EDIT';
 }
 @injectIntl
 @withConnect(
@@ -86,9 +84,6 @@ class CreateAndEditModal extends React.PureComponent {
               data: {},
             });
           });
-          // getDataByKey(DBInfo.DBName, DBInfo.storeName.award, 1).then((res) => {
-          //   console.log('res: ', res);
-          // });
         } else if (type === EDIT) {
           this.props.postEditEntity(values);
         }
