@@ -48,12 +48,10 @@ const { Option } = Select;
 @Form.create()
 class Toolbar extends React.Component {
   static propTypes = {
-    searchCondition: PropTypes.object.isRequired,
     getDataList: PropTypes.func.isRequired,
     updateEntityModal: PropTypes.func.isRequired,
     updateSearchCondition: PropTypes.func.isRequired,
     form: PropTypes.any.isRequired,
-    intl: intlShape.isRequired,
   };
 
   componentDidMount() {
@@ -82,58 +80,11 @@ class Toolbar extends React.Component {
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
-    const { searchCondition, intl } = this.props;
-
     return (
       <ToolbarContainer>
         <FunctionButtonsContainer>
           <Button type="primary" onClick={this.handleClickCreate}>创建规则</Button>
         </FunctionButtonsContainer>
-        <Form>
-          <Row gutter={24}>
-            <Col span={6}>
-              <Form.Item label={intl.formatMessage(messages.ruleManage.account)}>
-                {getFieldDecorator('account', {
-                  initialValue: searchCondition.account || '',
-                })(
-                  <Input />,
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label={intl.formatMessage(commonMessages.name)}>
-                {getFieldDecorator('name', {
-                  initialValue: searchCondition.name || '',
-                })(
-                  <Input />,
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label={intl.formatMessage(messages.ruleManage.accountStatus)}>
-                {
-                  getFieldDecorator('status', {
-                    initialValue: searchCondition.status,
-                  })(
-                    <Select>
-                      <Option value="">{intl.formatMessage(commonMessages.all)}</Option>
-                      {
-                        Object.keys(messages.ruleManage.accountStatusMap).map(key => (
-                          <Option value={key} key={key}>
-                            {intl.formatMessage(messages.ruleManage.accountStatusMap[key])}
-                          </Option>
-                        ))
-                      }
-                    </Select>,
-                  )}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24} style={{ textAlign: 'right' }}><Button type="primary" onClick={this.handleSearch}>{intl.formatMessage(commonMessages.search)}</Button></Col>
-          </Row>
-        </Form>
       </ToolbarContainer>);
   }
 }

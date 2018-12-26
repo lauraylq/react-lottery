@@ -11,7 +11,6 @@ export function insert(db, storeName, tempData) {
     };
     // 2.2、当事务中出现错误时触发，默认的处理方式为回滚事务；
     transaction.onerror = (event) => {
-      alert('数据插入失败');
       reject(event);
     };
     // 2.3、当事务被终止时触发
@@ -20,6 +19,7 @@ export function insert(db, storeName, tempData) {
     const objStore = transaction.objectStore(storeName);
     // 2.5、向storeName存储空间加入一个storeName对象，获得request对象用于处理用户对数据库的操作请求
     if (Array.isArray(tempData)) {
+      debugger;
       tempData.forEach((item) => {
         const request = objStore.add(item);
         request.onsuccess = (e) => {
@@ -60,30 +60,32 @@ export function getDataByKey(db, storeName, key) {
 export function getData(db, storeName) {
   return new Promise((resolve, reject) => {
     // 使用事务
-    const transaction = window.db.transaction(storeName, 'readonly');
-    const objectStore = transaction.objectStore(storeName);
-    const request = objectStore.openCursor();
+    if (window.db) {
+      const transaction = window.db.transaction(storeName, 'readonly');
+      const objectStore = transaction.objectStore(storeName);
+      const request = objectStore.openCursor();
 
-    const dataArr = [];
-    request.onsuccess = (event) => {
-      // 创建一个游标
-      const cursor = event.target.result;
-      // 根据游标判断是否有数据
-      if (cursor) {
-        const linkRecord = cursor.value;
-        dataArr.push(linkRecord);
-        // 调用cursor.continue()方法访问下一条数据
-        // 当游标到达下一条数据时，onsuccess事件会再一次触发
-        cursor.continue();
-      } else {
-        // 如果一个结果也没有，说明游标到底了，输出信息
-        resolve(dataArr);
-      }
-    };
-    // 2.2、当事务中出现错误时触发，默认的处理方式为回滚事务；
-    transaction.onerror = (event) => {
-      reject(event);
-    };
+      const dataArr = [];
+      request.onsuccess = (event) => {
+        // 创建一个游标
+        const cursor = event.target.result;
+        // 根据游标判断是否有数据
+        if (cursor) {
+          const linkRecord = cursor.value;
+          dataArr.push(linkRecord);
+          // 调用cursor.continue()方法访问下一条数据
+          // 当游标到达下一条数据时，onsuccess事件会再一次触发
+          cursor.continue();
+        } else {
+          // 如果一个结果也没有，说明游标到底了，输出信息
+          resolve(dataArr);
+        }
+      };
+      // 2.2、当事务中出现错误时触发，默认的处理方式为回滚事务；
+      transaction.onerror = (event) => {
+        reject(event);
+      };
+    }
   });
 }
 
