@@ -48,7 +48,6 @@ const { Option } = Select;
 @Form.create()
 class Toolbar extends React.Component {
   static propTypes = {
-    getDataList: PropTypes.func.isRequired,
     updateEntityModal: PropTypes.func.isRequired,
     updateSearchCondition: PropTypes.func.isRequired,
     form: PropTypes.any.isRequired,
@@ -61,11 +60,6 @@ class Toolbar extends React.Component {
   handleSearch = () => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.props.getDataList({
-          ...values,
-          page: 1,
-          perpage: commonConf.table.defaultPageSize,
-        });
         this.props.updateSearchCondition(values);
       }
     });

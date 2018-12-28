@@ -24,9 +24,10 @@ import commonConf from 'config/main.conf';
 import { getData } from 'utils/store';
 
 import { NAMESPACE } from '../constants';
-import { getDataList, updateEntityModal, updateResetPasswordModal } from '../actions';
+import { updateEntityModal, updateResetPasswordModal } from '../actions';
 import { selectPagination, selectSearchCondition, selectTableData } from '../selectors';
-import { selectLoading, selectLang } from '../../../state/selectors';
+import { selectLoading, selectLang, selectCurrentAward } from '../../../state/selectors';
+import { updateCurrentAward } from '../../../state/actions';
 
 const { Option } = Select;
 const withConnect = connectFactory(NAMESPACE);
@@ -42,24 +43,27 @@ const withConnect = connectFactory(NAMESPACE);
   createStructuredSelector({
     tableData: selectTableData,
     pagination: selectPagination,
+    currentAward: selectCurrentAward,
     searchCondition: selectSearchCondition,
     loading: selectLoading,
     lang: selectLang,
   }),
   {
-    getDataList,
+    updateCurrentAward,
     updateEntityModal,
     updateResetPasswordModal,
   },
 )
 class DataTable extends React.PureComponent {
   state = {
-    dateList: [],
+    awardArr: [],
   };
 
   // 静态变量，propTypes一定是静态变量，是挂载在类上的；
   static propTypes = {
     updateEntityModal: PropTypes.func.isRequired,
+    updateCurrentAward: PropTypes.func.isRequired,
+    currentAward: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
     intl: intlShape.isRequired,
   };
@@ -68,7 +72,7 @@ class DataTable extends React.PureComponent {
     const { DBInfo } = commonConf;
     getData(DBInfo.storeName.award).then((res) => {
       this.setState({
-        dateList: res,
+        awardArr: res,
       });
     });
   }
@@ -127,21 +131,31 @@ class DataTable extends React.PureComponent {
     });
   }
 
+  handleChange = (value) => {
+    const { awardArr } = this.state;
+    if (Array.isArray(awardArr)) {
+      const currentAward = awardArr.filter(item => item.key === value);
+      if (currentAward[0]) {
+        this.props.updateCurrentAward(currentAward[0]);
+      }
+    }
+  }
+
   render() {
-    const { loading } = this.props;
-    const { dateList } = this.state;
+    const { loading, currentAward } = this.props;
+    const { awardArr } = this.state;
     return (
       <div>
-        <Select defaultValue="lucy" style={{ width: 120 }}>
-          <Option value="lucy">Lucy</Option>
+        <Select value={currentAward.key} style={{ width: 120 }} onChange={this.handleChange}>
+          { awardArr.map(item => <Option key={item.key} value={item.key}>{item.award_name}</Option>) }
         </Select>
         <TableContainer>
           <Table
             bordered
             loading={loading}
             columns={this.columns}
-            dataSource={dateList}
-            rowKey="id"
+            dataSource={awardArr}
+            rowKey="key"
             pagination={{
               pageSize: 20,
             }}

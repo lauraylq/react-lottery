@@ -34,8 +34,7 @@ function reducer(state = initialState, action) {
       return state
         .set('platformAuth', action.payload);
     case UPDATE_CURRENT_AWARD:
-      return state
-        .set('currentAward', action.payload);
+      return state.set('currentAward', fromJS(action.payload));
     default:
       break;
   }

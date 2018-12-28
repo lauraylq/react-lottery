@@ -16,3 +16,8 @@ export const selectCurrentUserInfo = createSelector(
   selectGlobal,
   subState => subState.get('currentUser').toJS(),
 );
+
+export const selectCurrentAward = createSelector(
+  selectGlobal,
+  subState => subState.get('currentAward').toJS(),
+);
