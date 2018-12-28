@@ -22,6 +22,7 @@ module.exports = {
       containers: path.resolve(process.cwd(), 'src', 'containers'),
       utils: path.resolve(process.cwd(), 'src', 'utils'),
       config: path.resolve(process.cwd(), 'src', 'config'),
+      images: path.resolve(process.cwd(), 'src', 'images'),
       moment$: 'moment/moment.js',
     },
     modules: ['node_modules', 'app'],

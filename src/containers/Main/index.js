@@ -15,11 +15,8 @@ import { BrowserRouter, Route, Link } from 'react-router-dom';
 
 import commonConf from 'config/main.conf';
 import RuleManage from 'containers/RuleManage/Loadable';
-
-const {
-  Content,
-} = Layout;
-
+import Lottery from 'containers/Lottery';
+import './index.less';
 
 class Main extends React.Component {
 
@@ -61,16 +58,14 @@ class Main extends React.Component {
 
   render() {
     return (
-      <Layout style={{ minHeight: '100vh' }}>
-        <Content>
-          <BrowserRouter>
-            <div>
-              <Link to="ruleManage"> 规则设置</Link>
-              <Route path="/ruleManage" component={RuleManage} />
-            </div>
-          </BrowserRouter>
-        </Content>
-      </Layout>
+      <BrowserRouter>
+        <div className="lottery-container">
+          <Link to="ruleManage"> 规则设置</Link>
+          <Link to="lottery"> 去抽奖</Link>
+          <Route path="/ruleManage" component={RuleManage} />
+          <Route path="/lottery" component={Lottery} />
+        </div>
+      </BrowserRouter>
     );
   }
 }
