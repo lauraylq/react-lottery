@@ -52,6 +52,7 @@ class Main extends React.Component {
 
       request.onerror = (event) => {
         console.log(`打开失败,错误号：${event.target.errorCode}`);
+        console.log('event.target: ', event.target);
       };
     }
   };

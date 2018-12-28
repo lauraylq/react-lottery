@@ -2,9 +2,9 @@ import React from 'react';
 import XLSX from 'xlsx';
 import commonConf from 'config/main.conf';
 import { insert } from 'utils/store';
-import { message } from 'antd';
 
 export default class UploadUserData extends React.Component {
+
   wb = ''; // 读取完成的数据
 
   // 导入elsx
@@ -32,7 +32,7 @@ export default class UploadUserData extends React.Component {
       });
       const { DBInfo } = commonConf;
       if (userData && userData.length) {
-        insert(DBInfo.DBName, DBInfo.storeName.user, userData).then((res) => {
+        insert(DBInfo.storeName.user, userData).then((res) => {
           message.success(`已导入${res}条数据`);
         });
       }

@@ -8,7 +8,7 @@ const conf = {
     // indexDB名称
     DBName: 'sftc-lottery',
     // indexDB版本
-    version: '7',
+    version: '11',
     // indexDB存储表名称
     storeName: {
       user: 'user', // 用户

@@ -77,7 +77,7 @@ class CreateAndEditModal extends React.PureComponent {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         if (type === CREATE) {
-          insert(DBInfo.DBName, DBInfo.storeName.award, values).then((res) => {
+          insert(DBInfo.storeName.award, values).then((res) => {
             this.props.updateEntityModal({
               type: CREATE,
               show: false,

@@ -4,6 +4,7 @@ import {
   TOOGLE_LANG,
   GET_LOGIN_USER_INFO,
   UPDATE_PLATFORM_AUTH,
+  UPDATE_CURRENT_AWARD,
 } from 'utils/constants';
 
 import {
@@ -46,6 +47,13 @@ export function showDownloadListModal() {
 export function updatePlatformAuth(payload) {
   return {
     type: UPDATE_PLATFORM_AUTH,
+    payload,
+  };
+}
+
+export function updateCurrentAward(payload) {
+  return {
+    type: UPDATE_CURRENT_AWARD,
     payload,
   };
 }

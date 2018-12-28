@@ -5,6 +5,7 @@ import {
   GET_LOGIN_USER_INFO,
   FATCH_ACTION_SUCCESS_PREFIX,
   UPDATE_PLATFORM_AUTH,
+  UPDATE_CURRENT_AWARD,
 } from 'utils/constants';
 
 import { getLanguage } from 'utils/i18n';
@@ -14,6 +15,7 @@ const initialState = fromJS({
   lang: getLanguage(),
   currentUser: {},
   platformAuth: true,
+  currentAward: {},
 });
 
 function reducer(state = initialState, action) {
@@ -31,7 +33,9 @@ function reducer(state = initialState, action) {
       localStorage.platformAuth = action.payload;
       return state
         .set('platformAuth', action.payload);
-
+    case UPDATE_CURRENT_AWARD:
+      return state
+        .set('currentAward', action.payload);
     default:
       break;
   }

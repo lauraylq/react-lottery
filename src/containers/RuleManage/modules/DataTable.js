@@ -10,6 +10,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Table,
+  Select,
 } from 'antd';
 
 import { createStructuredSelector } from 'reselect';
@@ -27,6 +28,7 @@ import { getDataList, updateEntityModal, updateResetPasswordModal } from '../act
 import { selectPagination, selectSearchCondition, selectTableData } from '../selectors';
 import { selectLoading, selectLang } from '../../../state/selectors';
 
+const { Option } = Select;
 const withConnect = connectFactory(NAMESPACE);
 @injectIntl
 @withConnect(
@@ -64,7 +66,7 @@ class DataTable extends React.PureComponent {
 
   componentDidMount() {
     const { DBInfo } = commonConf;
-    getData(DBInfo.DBName, DBInfo.storeName.award).then((res) => {
+    getData(DBInfo.storeName.award).then((res) => {
       this.setState({
         dateList: res,
       });
@@ -76,6 +78,10 @@ class DataTable extends React.PureComponent {
 
   // 实例变量，挂载在实例上，如若在此变量中未使用this，也可声明为静态变量
   columns = [{
+    title: 'id',
+    dataIndex: 'key',
+    key: 'key',
+  }, {
     title: '奖项名称',
     dataIndex: 'award_name',
     key: 'award_name',
@@ -125,18 +131,23 @@ class DataTable extends React.PureComponent {
     const { loading } = this.props;
     const { dateList } = this.state;
     return (
-      <TableContainer>
-        <Table
-          bordered
-          loading={loading}
-          columns={this.columns}
-          dataSource={dateList}
-          rowKey="id"
-          pagination={{
-            pageSize: 20,
-          }}
-        />
-      </TableContainer>
+      <div>
+        <Select defaultValue="lucy" style={{ width: 120 }}>
+          <Option value="lucy">Lucy</Option>
+        </Select>
+        <TableContainer>
+          <Table
+            bordered
+            loading={loading}
+            columns={this.columns}
+            dataSource={dateList}
+            rowKey="id"
+            pagination={{
+              pageSize: 20,
+            }}
+          />
+        </TableContainer>
+      </div>
     );
   }
 }

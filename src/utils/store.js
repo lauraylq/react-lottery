@@ -1,5 +1,5 @@
 // 新增数据
-export function insert(db, storeName, tempData) {
+export function insert(storeName, tempData) {
   return new Promise((resolve, reject) => {
     let storeNum = 0;
     // 使用事务
@@ -19,7 +19,6 @@ export function insert(db, storeName, tempData) {
     const objStore = transaction.objectStore(storeName);
     // 2.5、向storeName存储空间加入一个storeName对象，获得request对象用于处理用户对数据库的操作请求
     if (Array.isArray(tempData)) {
-      debugger;
       tempData.forEach((item) => {
         const request = objStore.add(item);
         request.onsuccess = (e) => {
@@ -36,7 +35,7 @@ export function insert(db, storeName, tempData) {
 }
 
 // 根据主键获取数据
-export function getDataByKey(db, storeName, key) {
+export function getDataByKey(storeName, key) {
   return new Promise((resolve, reject) => {
     // 使用事务
     const transaction = window.db.transaction(storeName);
@@ -56,8 +55,43 @@ export function getDataByKey(db, storeName, key) {
   });
 }
 
+// 根据主键删除数据
+export function deleteDataByKey(storeName, key) {
+  return new Promise((resolve, reject) => {
+    // 使用事务
+    const transaction = window.db.transaction(storeName, 'readwrite');
+    const objectStore = transaction.objectStore(storeName);
+    const request = objectStore.delete(key);
+    request.onsuccess = (event) => {
+      resolve('success');
+    };
+    // 2.2、当事务中出现错误时触发，默认的处理方式为回滚事务；
+    transaction.onerror = (event) => {
+      reject(event);
+    };
+  });
+}
+
+// 更新数据
+export function updateData(storeName, obj) {
+  return new Promise((resolve, reject) => {
+    // 使用事务
+    const transaction = window.db.transaction(storeName, 'readwrite');
+    const objectStore = transaction.objectStore(storeName);
+    const request = objectStore.put(obj);
+    request.onsuccess = (event) => {
+      resolve('success');
+    };
+    // 2.2、当事务中出现错误时触发，默认的处理方式为回滚事务；
+    transaction.onerror = (event) => {
+      reject(event);
+    };
+  });
+}
+
+
 // 根据表中全部数据
-export function getData(db, storeName) {
+export function getData(storeName) {
   return new Promise((resolve, reject) => {
     // 使用事务
     if (window.db) {
@@ -72,6 +106,7 @@ export function getData(db, storeName) {
         // 根据游标判断是否有数据
         if (cursor) {
           const linkRecord = cursor.value;
+          linkRecord.key = cursor.key;
           dataArr.push(linkRecord);
           // 调用cursor.continue()方法访问下一条数据
           // 当游标到达下一条数据时，onsuccess事件会再一次触发
