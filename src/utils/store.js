@@ -72,6 +72,13 @@ export function deleteDataByKey(storeName, key) {
   });
 }
 
+// 清空数据表
+export function clearObjectStore(storeName) {
+  const transaction = window.db.transaction(storeName, 'readwrite');
+  const store = transaction.objectStore(storeName);
+  store.clear();
+}
+
 // 更新数据
 export function updateData(storeName, obj) {
   return new Promise((resolve, reject) => {

@@ -6,6 +6,7 @@ import {
   FATCH_ACTION_SUCCESS_PREFIX,
   UPDATE_PLATFORM_AUTH,
   UPDATE_CURRENT_AWARD,
+  UPDATE_USER_DATA,
 } from 'utils/constants';
 
 import { getLanguage } from 'utils/i18n';
@@ -16,6 +17,7 @@ const initialState = fromJS({
   currentUser: {},
   platformAuth: true,
   currentAward: {},
+  userData: [],
 });
 
 function reducer(state = initialState, action) {
@@ -35,6 +37,8 @@ function reducer(state = initialState, action) {
         .set('platformAuth', action.payload);
     case UPDATE_CURRENT_AWARD:
       return state.set('currentAward', fromJS(action.payload));
+    case UPDATE_USER_DATA:
+      return state.set('userData', fromJS(action.payload));
     default:
       break;
   }

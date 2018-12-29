@@ -5,6 +5,7 @@ import {
   GET_LOGIN_USER_INFO,
   UPDATE_PLATFORM_AUTH,
   UPDATE_CURRENT_AWARD,
+  UPDATE_USER_DATA,
 } from 'utils/constants';
 
 import {
@@ -54,6 +55,13 @@ export function updatePlatformAuth(payload) {
 export function updateCurrentAward(payload) {
   return {
     type: UPDATE_CURRENT_AWARD,
+    payload,
+  };
+}
+
+export function updateUserData(payload) {
+  return {
+    type: UPDATE_USER_DATA,
     payload,
   };
 }
