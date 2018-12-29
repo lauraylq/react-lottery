@@ -8,7 +8,7 @@ import { createStructuredSelector } from 'reselect';
 import connectFactory from 'utils/connectFactory';
 import { getData } from 'utils/store';
 import commonConf from 'config/main.conf';
-import { selectCurrentAward } from '../../state/selectors';
+import { selectCurrentAward, selectUserData } from '../../state/selectors';
 import './index.less';
 
 
@@ -23,61 +23,64 @@ const withConnect = connectFactory('lottery');
   // }),
   createStructuredSelector({
     currentAward: selectCurrentAward,
+    userData: selectUserData,
   }),
+  { // 其实这里可以处理掉，当前每引入一个action,需要更新props绑定，更新PropsType，
+    // 实际可以直接将action全量引入，但是出于对性能及规范开发的要求，这里仍然使用单独引入的方式；
+  },
 )
 class Lottery extends React.Component {
   state = {
-    isScroll: false,
-    awardNum: '', // 奖项人数
-    singleNum: '', // 单次抽取人数
-    sex: '', // 性别
     rollIdArr: [], // 当前抽中集合
-    rollLen: 0, // 本轮已抽中用户数
   };
 
   componentDidMount() {
-    window.addEventListener('keydown', e => this.keyDown(e));
-    const awardRule = this.props.currentAward;
-    if (this.props.currentAward) {
-      this.setState({
-        awardNum: awardRule.award_num,
-        singleNum: awardRule.single_num,
-        sex: awardRule.sex,
-      });
-    }
+    window.addEventListener('keydown', this.keyDown);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log('nextProps: ', nextProps.currentAward);
+    console.log('thisProps: ', this.props.currentAward);
   }
 
   static propTypes = {
-    currentAward: PropTypes.object,
+    currentAward: PropTypes.object.isRequired,
+    userData: PropTypes.array.isRequired,
   };
 
-  keyDown(e) {
+  isBegin = false;
+
+  timeInterJS = null;
+
+  intervalTime = 100; // 滚动间隔
+
+  currentSingleNum = 0; // 计算后单次抽奖数
+
+  rollIdArr = [];
+
+  rollLen = 0 // 本轮已抽中用户数
+
+  keyDown = (e) => {
+    debugger;
     const keyCode = e.code;
+    if (keyCode === 'Enter') {
+      this.startScroll();
+    }
     if (keyCode === 'Space') {
-      const { isScroll } = this.state;
-      if (isScroll) {
-        this.setState({
-          isScroll: false,
-        });
-        this.startScroll();
-      } else {
-        this.setState({
-          isScroll: true,
-        });
-        this.stopScroll();
-      }
+      this.stopScroll();
     }
   }
 
   // 1.开始滚动
   startScroll = () => {
-    console.log('start');
-    const tempLast = this.state.awardNum - this.state.rollLen;
+    const { currentAward, userData } = this.props;
+    const { award_num, single_num } = currentAward;
+    this.currentSingleNum = single_num;
+
+    const tempLast = award_num - this.rollLen;
     // 若小于单次最大抽奖人数
-    if (!!tempLast && tempLast < this.state.singleNum) {
-      this.setState({
-        singleNum: tempLast.toString(),
-      });
+    if (!tempLast && tempLast < single_num) {
+      this.currentSingleNum = tempLast.toString();
     }
 
     // 若已抽完
@@ -85,15 +88,53 @@ class Lottery extends React.Component {
       message.warning('本轮已抽取完毕');
       return false;
     }
+    // 抽奖池内剩余人数
+    const leftUser = userData.filter(item => item.award !== '0');
+    const tempRoll = userData.length - leftUser.length;
+    if (!this.currentSingleNum) {
+      return false;
+    }
+    if (tempRoll <= this.currentSingleNum) {
+      message.warning(`池内剩余总数${tempRoll}，不够本次抽取${this.currentSingleNum}！`);
+      return false;
+    }
+
+    // 定时器滚动
+    this.isBegin = true;
+    this.timeInterJS = setInterval(this.roll, this.intervalTime);
+  }
+
+  // 滚动主要函数
+  roll = () => {
+    // 先清空抽中集合数组
+    this.rollIdArr = [];
+    // 更新抽中集合
+    while (this.rollIdArr.length < this.currentSingleNum) {
+      const rnd = this.getRand();
+      const { userData } = this.props;
+      const obj = userData[rnd];
+      if (obj.award === '0') {
+        this.rollIdArr.push(obj);
+        this.setState({
+          rollIdArr: this.rollIdArr,
+        });
+      }
+    }
+  }
+
+  // 随机比例返回抽取结果
+  getRand = () => {
+    return Math.floor(Math.random() * this.props.userData.length);
   }
 
   // 1.开始滚动
   stopScroll = () => {
-    console.log('stop');
+    clearInterval(this.timeInterJS);
   }
 
   render() {
     const { currentAward } = this.props;
+    const { rollIdArr } = this.state;
     return (
       <div className="lottery-main">
         <div className="lottery-title">
@@ -101,7 +142,11 @@ class Lottery extends React.Component {
             {currentAward && currentAward.award_name}
           </div>
           <div className="lottery-roll">
-            杨立琦 01376542
+            {
+              rollIdArr && rollIdArr.map(item => (
+                <span key={item.id}>{ `${item.name} ${item.id}`}</span>
+              ))
+            }
           </div>
         </div>
         <div className="lottery-result">

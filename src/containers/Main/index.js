@@ -6,23 +6,47 @@
  * date: {{date}}
  */
 import React from 'react';
-
-import {
-  Layout,
-} from 'antd';
+import PropTypes from 'prop-types';
 
 import { BrowserRouter, Route, Link } from 'react-router-dom';
 
 import commonConf from 'config/main.conf';
 import RuleManage from 'containers/RuleManage/Loadable';
 import Lottery from 'containers/Lottery';
+import { getData } from 'utils/store';
 import './index.less';
 
+
+import { createStructuredSelector } from 'reselect';
+import connectFactory from 'utils/connectFactory';
+import { updateUserData } from '../../state/actions';
+
+const withConnect = connectFactory('lottery');
+@withConnect(
+  // 可以使用者两种方式mapstatetoprops 但是推荐使用select的方式，经测会减少渲染次数，性能较好；
+  // (globalState, state) => ({
+  //   tableData: state.get('tableData').toJS(),
+  //   pagination: state.get('pagination').toJS(),
+  //   searchCondition: state.get('searchCondition').toJS(),
+  //   loading: globalState.getIn(['global', 'loading']),
+  // }),
+  createStructuredSelector({
+  }),
+  { // 其实这里可以处理掉，当前每引入一个action,需要更新props绑定，更新PropsType，
+    // 实际可以直接将action全量引入，但是出于对性能及规范开发的要求，这里仍然使用单独引入的方式；
+    updateUserData,
+  },
+)
 class Main extends React.Component {
 
   componentWillMount() {
     this.init();
+    
   }
+
+  static propTypes = {
+    updateUserData: PropTypes.func.isRequired,
+  };
 
   init = () => {
     const { DBInfo } = commonConf;
@@ -30,10 +54,16 @@ class Main extends React.Component {
       const request = window.indexedDB.open(DBInfo.DBName, DBInfo.version);
       request.onsuccess = (event) => {
         window.db = event.target.result;
+        getData(DBInfo.storeName.user).then((res) => {
+          this.props.updateUserData(res);
+        });
       };
 
       request.onupgradeneeded = (event) => {
         window.db = event.target.result;
+        getData(DBInfo.storeName.user).then((res) => {
+          this.props.updateUserData(res);
+        });
         let objectStore;
         if (!window.db.objectStoreNames.contains('award')) {
           objectStore = window.db.createObjectStore('award', { autoIncrement: true });

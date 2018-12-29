@@ -23,7 +23,7 @@ import { CREATE, EDIT } from 'utils/constants';
 import { injectIntl, intlShape } from 'react-intl';
 import commonMessages from 'utils/commonMessages';
 import commonConf from 'config/main.conf';
-import { insert, getData, getDataByKey } from 'utils/store';
+import { insert, updateData } from 'utils/store';
 
 import { NAMESPACE } from '../constants';
 import { updateEntityModal, postCreateEntity, postEditEntity } from '../actions';
@@ -85,7 +85,13 @@ class CreateAndEditModal extends React.PureComponent {
             });
           });
         } else if (type === EDIT) {
-          this.props.postEditEntity(values);
+          updateData(DBInfo.storeName.award, values).then((res) => {
+            this.props.updateEntityModal({
+              type: EDIT,
+              show: false,
+              data: {},
+            });
+          });
         }
       }
     });

@@ -83,6 +83,7 @@ export function clearObjectStore(storeName) {
 export function updateData(storeName, obj) {
   return new Promise((resolve, reject) => {
     // 使用事务
+    debugger;
     const transaction = window.db.transaction(storeName, 'readwrite');
     const objectStore = transaction.objectStore(storeName);
     const request = objectStore.put(obj);
