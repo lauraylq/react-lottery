@@ -61,7 +61,6 @@ class Lottery extends React.Component {
   rollLen = 0 // 本轮已抽中用户数
 
   keyDown = (e) => {
-    debugger;
     const keyCode = e.code;
     if (keyCode === 'Enter') {
       this.startScroll();
@@ -73,35 +72,37 @@ class Lottery extends React.Component {
 
   // 1.开始滚动
   startScroll = () => {
-    const { currentAward, userData } = this.props;
-    const { award_num, single_num } = currentAward;
-    this.currentSingleNum = single_num;
+    if (!this.isBegin) {
+      const { currentAward, userData } = this.props;
+      const { award_num, single_num } = currentAward;
+      this.currentSingleNum = single_num;
 
-    const tempLast = award_num - this.rollLen;
-    // 若小于单次最大抽奖人数
-    if (!tempLast && tempLast < single_num) {
-      this.currentSingleNum = tempLast.toString();
-    }
+      const tempLast = award_num - this.rollLen;
+      // 若小于单次最大抽奖人数
+      if (!tempLast && tempLast < single_num) {
+        this.currentSingleNum = tempLast.toString();
+      }
 
-    // 若已抽完
-    if (tempLast === 0) {
-      message.warning('本轮已抽取完毕');
-      return false;
-    }
-    // 抽奖池内剩余人数
-    const leftUser = userData.filter(item => item.award !== '0');
-    const tempRoll = userData.length - leftUser.length;
-    if (!this.currentSingleNum) {
-      return false;
-    }
-    if (tempRoll <= this.currentSingleNum) {
-      message.warning(`池内剩余总数${tempRoll}，不够本次抽取${this.currentSingleNum}！`);
-      return false;
-    }
+      // 若已抽完
+      if (tempLast === 0) {
+        message.warning('本轮已抽取完毕');
+        return false;
+      }
+      // 抽奖池内剩余人数
+      const leftUser = userData.filter(item => item.award !== '0');
+      const tempRoll = userData.length - leftUser.length;
+      if (!this.currentSingleNum) {
+        return false;
+      }
+      if (tempRoll <= this.currentSingleNum) {
+        message.warning(`池内剩余总数${tempRoll}，不够本次抽取${this.currentSingleNum}！`);
+        return false;
+      }
 
-    // 定时器滚动
-    this.isBegin = true;
-    this.timeInterJS = setInterval(this.roll, this.intervalTime);
+      // 定时器滚动
+      this.isBegin = true;
+      this.timeInterJS = setInterval(this.roll, this.intervalTime);
+    }
   }
 
   // 滚动主要函数
@@ -129,7 +130,10 @@ class Lottery extends React.Component {
 
   // 1.开始滚动
   stopScroll = () => {
-    clearInterval(this.timeInterJS);
+    if (this.isBegin) {
+      clearInterval(this.timeInterJS);
+      this.isBegin = false;
+    }
   }
 
   render() {

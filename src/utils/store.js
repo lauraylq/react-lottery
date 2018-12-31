@@ -83,11 +83,11 @@ export function clearObjectStore(storeName) {
 export function updateData(storeName, obj) {
   return new Promise((resolve, reject) => {
     // 使用事务
-    debugger;
     const transaction = window.db.transaction(storeName, 'readwrite');
     const objectStore = transaction.objectStore(storeName);
-    const request = objectStore.put(obj);
+    const request = objectStore.get(obj.key);
     request.onsuccess = (event) => {
+      objectStore.put(obj);
       resolve('success');
     };
     // 2.2、当事务中出现错误时触发，默认的处理方式为回滚事务；

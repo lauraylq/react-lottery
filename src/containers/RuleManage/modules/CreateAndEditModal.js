@@ -85,6 +85,7 @@ class CreateAndEditModal extends React.PureComponent {
             });
           });
         } else if (type === EDIT) {
+          values.key = this.props.entityModal.data.key;
           updateData(DBInfo.storeName.award, values).then((res) => {
             this.props.updateEntityModal({
               type: EDIT,
