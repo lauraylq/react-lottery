@@ -206,9 +206,30 @@ class Lottery extends React.Component {
         <div className="lottery-result" style={{ display: this.state.showResult ? 'block' : 'none' }}>
           <div className="lottery-result-text">
             {
-              rollIdArr && rollIdArr.map(item => (
-                <div className={`result-style-${rollIdArr.length}`} key={item.id}>{ `${item.name} ${item.id}`}</div>
+              rollIdArr && rollIdArr.length < 10 && rollIdArr.map(item => (
+                <div className={`result-style-${rollIdArr.length}`} key={item.id}>
+                  <span className="result-name">{ `${item.name}`}</span>
+                  <span>{ `${item.id}`}</span>
+                </div>
               ))
+            }
+            {
+              rollIdArr && rollIdArr.length === 10 && rollIdArr.map((item, index) => {
+                if (index % 2 === 1) {
+                  return (
+                    <div style={{ height: '6vh', lineHeight: '6vh' }}>
+                      <div className={`result-style-${rollIdArr.length}`} key={rollIdArr[index - 1].id}>
+                        <span className="result-name">{`${rollIdArr[index - 1].name}`}</span>
+                        <span>{`${rollIdArr[index - 1].id}`}</span>
+                      </div>
+                      <div className={`result-style-${rollIdArr.length}`} key={item.id}>
+                        <span className="result-name">{`${item.name}`}</span>
+                        <span>{`${item.id}`}</span>
+                      </div>
+                    </div>);
+                }
+                return '';
+              })
             }
           </div>
         </div>
