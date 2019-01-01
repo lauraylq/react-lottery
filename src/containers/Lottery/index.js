@@ -32,6 +32,7 @@ const withConnect = connectFactory('lottery');
 class Lottery extends React.Component {
   state = {
     rollIdArr: [], // 当前抽中集合
+    showResult: false,
   };
 
   componentDidMount() {
@@ -39,8 +40,10 @@ class Lottery extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('nextProps: ', nextProps.currentAward);
-    console.log('thisProps: ', this.props.currentAward);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.keyDown);
   }
 
   static propTypes = {
@@ -73,6 +76,9 @@ class Lottery extends React.Component {
   // 1.开始滚动
   startScroll = () => {
     if (!this.isBegin) {
+      this.setState({
+        showResult: false,
+      });
       const { currentAward, userData } = this.props;
       const { award_num, single_num } = currentAward;
       this.currentSingleNum = single_num;
@@ -83,8 +89,8 @@ class Lottery extends React.Component {
         this.currentSingleNum = tempLast.toString();
       }
 
-      // 若已抽完
-      if (tempLast === 0) {
+      const currentAwardNum = userData.filter(item => Number(item.award) === Number(this.props.currentAward.id));
+      if (award_num <= currentAwardNum.length) {
         message.warning('本轮已抽取完毕');
         return false;
       }
@@ -140,34 +146,44 @@ class Lottery extends React.Component {
           console.log(res);
         });
         this.rollLen += this.state.rollIdArr.length;
-      })
+      });
+      this.setState({
+        showResult: true,
+      });
       this.isBegin = false;
     }
   }
 
   render() {
-    const { currentAward } = this.props;
+    const { currentAward, showResult } = this.props;
     const { rollIdArr } = this.state;
     return (
-      <div className="lottery-main">
-        <div className="lottery-title">
-          <div className="lottery-name">
-            {currentAward && currentAward.award_name}
-          </div>
-          <div className="lottery-roll">
-            {/* {
-              rollIdArr && rollIdArr.map(item => (
-                <span key={item.id}>{ `${item.name} ${item.id}`}</span>
-              ))
-            } */}
-            {
-              rollIdArr[0] && (
-                <span key={rollIdArr[0].id}>{ `${rollIdArr[0].name} ${rollIdArr[0].id}`}</span>
-              )
-            }
+      <div className="lottery-wrapper">
+        <div className="lottery-main">
+          <div className="lottery-title">
+            <div className="lottery-name">
+              {currentAward && currentAward.award_name}
+            </div>
+            <div className="lottery-roll">
+              {/* {
+                rollIdArr && rollIdArr.map(item => (
+                  <span key={item.id}>{ `${item.name} ${item.id}`}</span>
+                ))
+              } */}
+              {
+                rollIdArr[0] && (
+                  <span key={rollIdArr[0].id}>{ `${rollIdArr[0].name} ${rollIdArr[0].id}`}</span>
+                )
+              }
+            </div>
           </div>
         </div>
-        <div className="lottery-result">
+        <div className="lottery-result" style={{ display: this.state.showResult ? 'flex' : 'none' }}>
+          {
+            rollIdArr[0] && (
+              <span key={rollIdArr[0].id}>{ `${rollIdArr[0].name} ${rollIdArr[0].id}`}</span>
+            )
+          }
         </div>
       </div>
     );

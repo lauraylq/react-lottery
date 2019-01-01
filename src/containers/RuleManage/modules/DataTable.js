@@ -145,8 +145,6 @@ class DataTable extends React.PureComponent {
 
   render() {
     const { loading, currentAward, awardList } = this.props;
-    console.log('awardList: ', awardList);
-    // const { currentAward } = this.props;
     return (
       <div>
         <Select value={currentAward.key} style={{ width: 120 }} onChange={this.handleChange}>
