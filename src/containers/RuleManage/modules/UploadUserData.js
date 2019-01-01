@@ -47,7 +47,7 @@ class UploadUserData extends React.Component {
       userData.forEach((value, index) => {
         userData[index].id = userData[index]['工号'];
         userData[index].name = userData[index]['姓名'];
-        userData[index].sex = userData[index]['性别'];
+        userData[index].sex = userData[index]['性别'] === '男' ? '1' : '2';
         userData[index].award = '0';
         delete userData[index]['工号'];
         delete userData[index]['姓名'];

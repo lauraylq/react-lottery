@@ -118,13 +118,15 @@ class Lottery extends React.Component {
     // 更新抽中集合
     while (this.rollIdArr.length < this.currentSingleNum) {
       const rnd = this.getRand();
-      const { userData } = this.props;
+      const { userData, currentAward } = this.props;
       const obj = userData[rnd];
       if (obj.award === '0') {
-        this.rollIdArr.push(obj);
-        this.setState({
-          rollIdArr: this.rollIdArr,
-        });
+        if (currentAward.sex === '0' || obj.sex === currentAward.sex) {
+          this.rollIdArr.push(obj);
+          this.setState({
+            rollIdArr: this.rollIdArr,
+          });
+        }
       }
     }
   }
