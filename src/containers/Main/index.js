@@ -14,6 +14,7 @@ import commonConf from 'config/main.conf';
 import RuleManage from 'containers/RuleManage/Loadable';
 import Lottery from 'containers/Lottery';
 import { getData } from 'utils/store';
+import { Drawer, Button } from 'antd';
 import './index.less';
 
 
@@ -38,14 +39,26 @@ const withConnect = connectFactory('lottery');
   },
 )
 class Main extends React.Component {
-
   componentWillMount() {
     this.init();
-    
   }
 
   static propTypes = {
     updateUserData: PropTypes.func.isRequired,
+  };
+
+  state = { visible: false };
+
+  showDrawer = () => {
+    this.setState({
+      visible: true,
+    });
+  };
+
+  onClose = () => {
+    this.setState({
+      visible: false,
+    });
   };
 
   init = () => {
@@ -91,8 +104,20 @@ class Main extends React.Component {
     return (
       <BrowserRouter>
         <div className="lottery-container">
-          <Link to="ruleManage"> 规则设置</Link>
-          <Link to="lottery"> 去抽奖</Link>
+          <Button type="primary" onClick={this.showDrawer}>
+          </Button>
+          <Drawer
+            title="SFTC LOTTEY"
+            placement="right"
+            width="100"
+            style={{ background: 'rgb(222, 229, 241)' }}
+            closable={false}
+            onClose={this.onClose}
+            visible={this.state.visible}
+          >
+            <div><Link to="ruleManage"> 规则设置</Link></div>
+            <div><Link to="lottery"> 去抽奖</Link></div>
+          </Drawer>
           <Route path="/ruleManage" component={RuleManage} />
           <Route path="/lottery" component={Lottery} />
         </div>
