@@ -83,14 +83,21 @@ class Lottery extends React.Component {
       const { award_num, single_num } = currentAward;
       this.currentSingleNum = single_num;
 
-      const tempLast = award_num - this.rollLen;
+      // 当前抽中数量
+      const currentAwardNum = userData.filter(item => Number(item.award) === Number(this.props.currentAward.id));
+      const tempLast = award_num - currentAwardNum.length;
+      console.log('tempLast: ', tempLast);
+      
+      console.log(this.rollLen);
       // 若小于单次最大抽奖人数
-      if (!tempLast && tempLast < single_num) {
+      if (tempLast && tempLast < single_num) {
+        debugger;
         this.currentSingleNum = tempLast.toString();
+        console.log('this.currentSingleNum: ', this.currentSingleNum);
       }
 
-      const currentAwardNum = userData.filter(item => Number(item.award) === Number(this.props.currentAward.id));
       if (award_num <= currentAwardNum.length) {
+        this.rollLen = 0;
         message.warning('本轮已抽取完毕');
         return false;
       }
@@ -115,12 +122,18 @@ class Lottery extends React.Component {
   roll = () => {
     // 先清空抽中集合数组
     this.rollIdArr = [];
-    // 更新抽中集合
+    this.setState({
+      rollIdArr: 0,
+    }, this.updateAwardArr);
+  }
+
+  // 更新抽中集合
+  updateAwardArr = () => {
     while (this.rollIdArr.length < this.currentSingleNum) {
       const rnd = this.getRand();
       const { userData, currentAward } = this.props;
       const obj = userData[rnd];
-      if (obj.award === '0') {
+      if (obj.award === '0' && !this.findInArr(this.rollIdArr, obj)) {
         if (currentAward.sex === '0' || obj.sex === currentAward.sex) {
           this.rollIdArr.push(obj);
           this.setState({
@@ -129,6 +142,16 @@ class Lottery extends React.Component {
         }
       }
     }
+  }
+
+  // 除去已抽奖人
+  findInArr = (arr, obj) => {
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].id === obj.id) {
+        return true;
+      }
+    }
+    return false;
   }
 
   // 随机比例返回抽取结果
@@ -180,12 +203,14 @@ class Lottery extends React.Component {
             </div>
           </div>
         </div>
-        <div className="lottery-result" style={{ display: this.state.showResult ? 'flex' : 'none' }}>
-          {
-            rollIdArr[0] && (
-              <span key={rollIdArr[0].id}>{ `${rollIdArr[0].name} ${rollIdArr[0].id}`}</span>
-            )
-          }
+        <div className="lottery-result" style={{ display: this.state.showResult ? 'block' : 'none' }}>
+          <div className="lottery-result-text">
+            {
+              rollIdArr && rollIdArr.map(item => (
+                <div className={`result-style-${rollIdArr.length}`} key={item.id}>{ `${item.name} ${item.id}`}</div>
+              ))
+            }
+          </div>
         </div>
       </div>
     );
