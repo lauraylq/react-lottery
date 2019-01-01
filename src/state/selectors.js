@@ -27,6 +27,21 @@ export const selectAwardList = createSelector(
   subState => subState.get('awardList').toJS(),
 );
 
+export const selectAwardMap = createSelector(
+  selectGlobal,
+  (subState) => {
+    const awardList = subState.get('awardList').toJS();
+    const awardMap = {};
+    if (awardList) {
+      awardList.forEach((item) => {
+        awardMap[item.id] = item.award_name;
+      });
+      return awardMap;
+    }
+    return {};
+  },
+);
+
 export const selectUserData = createSelector(
   selectGlobal,
   subState => subState.get('userData').toJS(),

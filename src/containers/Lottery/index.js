@@ -7,6 +7,7 @@ import {
 import { createStructuredSelector } from 'reselect';
 import connectFactory from 'utils/connectFactory';
 import { updateData } from 'utils/store';
+import screenshot from 'utils/screenshot';
 import commonConf from 'config/main.conf';
 import { selectCurrentAward, selectUserData } from '../../state/selectors';
 import './index.less';
@@ -83,9 +84,6 @@ class Lottery extends React.Component {
       // 当前抽中数量
       const currentAwardNum = userData.filter(item => Number(item.award) === Number(this.props.currentAward.id));
       const tempLast = award_num - currentAwardNum.length;
-      console.log('tempLast: ', tempLast);
-      
-      console.log(this.rollLen);
       // 若小于单次最大抽奖人数
       if (tempLast && tempLast < single_num) {
         this.currentSingleNum = tempLast.toString();
@@ -170,6 +168,12 @@ class Lottery extends React.Component {
       this.setState({
         showResult: true,
       });
+      const { currentAward } = this.props;
+      if (commonConf.download.show) {
+        setTimeout(() => {
+          screenshot(currentAward.award_name, currentAward.award_num);
+        }, commonConf.download.delay);
+      }
       this.isBegin = false;
     }
   }
@@ -185,11 +189,6 @@ class Lottery extends React.Component {
               {currentAward && currentAward.award_name}
             </div>
             <div className="lottery-roll">
-              {/* {
-                rollIdArr && rollIdArr.map(item => (
-                  <span key={item.id}>{ `${item.name} ${item.id}`}</span>
-                ))
-              } */}
               {
                 rollIdArr[0] && (
                   <span key={rollIdArr[0].id}>{ `${rollIdArr[0].name} ${rollIdArr[0].id}`}</span>

@@ -22,6 +22,11 @@ const conf = {
     1: '男',
     2: '女',
   },
+  // 是否需要下载抽奖截图
+  download: {
+    show: false,
+    delay: 800,
+  },
 };
 
 export default conf;

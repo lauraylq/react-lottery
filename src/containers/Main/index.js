@@ -12,6 +12,7 @@ import { BrowserRouter, Route, Link } from 'react-router-dom';
 
 import commonConf from 'config/main.conf';
 import RuleManage from 'containers/RuleManage/Loadable';
+import ResultManage from 'containers/ResultManage/Loadable';
 import Lottery from 'containers/Lottery';
 import { getData } from 'utils/store';
 import { Drawer, Button } from 'antd';
@@ -109,17 +110,21 @@ class Main extends React.Component {
           <Drawer
             title="SFTC LOTTEY"
             placement="right"
-            width="100"
+            width="155"
             style={{ background: 'rgb(222, 229, 241)' }}
             closable={false}
             onClose={this.onClose}
             visible={this.state.visible}
           >
-            <div><Link to="ruleManage"> 规则设置</Link></div>
-            <div><Link to="lottery"> 去抽奖</Link></div>
+            <ul>
+              <li><Link to="lottery"> 去抽奖</Link></li>
+              <li><Link to="ruleManage"> 规则设置</Link></li>
+              <li><Link to="resultManage"> 抽奖结果</Link></li>
+            </ul>
           </Drawer>
-          <Route path="/ruleManage" component={RuleManage} />
           <Route path="/lottery" component={Lottery} />
+          <Route path="/ruleManage" component={RuleManage} />
+          <Route path="/resultManage" component={ResultManage} />
         </div>
       </BrowserRouter>
     );
