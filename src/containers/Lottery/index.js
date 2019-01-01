@@ -6,7 +6,7 @@ import {
 
 import { createStructuredSelector } from 'reselect';
 import connectFactory from 'utils/connectFactory';
-import { getData } from 'utils/store';
+import { updateData } from 'utils/store';
 import commonConf from 'config/main.conf';
 import { selectCurrentAward, selectUserData } from '../../state/selectors';
 import './index.less';
@@ -128,10 +128,19 @@ class Lottery extends React.Component {
     return Math.floor(Math.random() * this.props.userData.length);
   }
 
-  // 1.开始滚动
+  // 1.停止滚动
   stopScroll = () => {
     if (this.isBegin) {
       clearInterval(this.timeInterJS);
+      // 设置抽中人奖项并同步至indexDB
+      this.rollIdArr.map((item) => {
+        item.award = this.props.currentAward.key;
+        const { DBInfo } = commonConf;
+        updateData(DBInfo.storeName.user, item.id, item).then((res) => {
+          console.log(res);
+        });
+        this.rollLen += this.state.rollIdArr.length;
+      })
       this.isBegin = false;
     }
   }
@@ -146,10 +155,15 @@ class Lottery extends React.Component {
             {currentAward && currentAward.award_name}
           </div>
           <div className="lottery-roll">
-            {
+            {/* {
               rollIdArr && rollIdArr.map(item => (
                 <span key={item.id}>{ `${item.name} ${item.id}`}</span>
               ))
+            } */}
+            {
+              rollIdArr[0] && (
+                <span key={rollIdArr[0].id}>{ `${rollIdArr[0].name} ${rollIdArr[0].id}`}</span>
+              )
             }
           </div>
         </div>

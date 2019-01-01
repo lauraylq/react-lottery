@@ -7,7 +7,7 @@ import {
   UPDATE_PLATFORM_AUTH,
   UPDATE_CURRENT_AWARD,
   UPDATE_USER_DATA,
-  UPDATE_AWARD_ARR,
+  UPDATE_AWARD_LIST,
 } from 'utils/constants';
 
 import { getLanguage } from 'utils/i18n';
@@ -19,7 +19,7 @@ const initialState = fromJS({
   platformAuth: true,
   currentAward: {},
   userData: [],
-  awardArr: [],
+  awardList: [],
 });
 
 function reducer(state = initialState, action) {
@@ -41,8 +41,8 @@ function reducer(state = initialState, action) {
       return state.set('currentAward', fromJS(action.payload));
     case UPDATE_USER_DATA:
       return state.set('userData', fromJS(action.payload));
-    case UPDATE_AWARD_ARR:
-      return state.set('awardArr', fromJS(action.payload));
+    case UPDATE_AWARD_LIST:
+      return state.set('awardList', fromJS(action.payload));
     default:
       break;
   }

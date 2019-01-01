@@ -25,12 +25,14 @@ import FunctionButtonsContainer from 'components/FunctionButtonsContainer';
 import { injectIntl, intlShape } from 'react-intl';
 import commonMessages from 'utils/commonMessages';
 import commonConf from 'config/main.conf';
+import { getData } from 'utils/store';
 
 import messages from '../messages';
 
 import { NAMESPACE } from '../constants';
 import { getDataList, updateEntityModal, updateSearchCondition } from '../actions';
 import { selectSearchCondition } from '../selectors';
+import { updateAwardList } from '../../../state/actions';
 
 const withConnect = connectFactory(NAMESPACE);
 const { Option } = Select;
@@ -42,6 +44,7 @@ const { Option } = Select;
   {
     getDataList,
     updateEntityModal,
+    updateAwardList,
     updateSearchCondition,
   },
 )
@@ -49,12 +52,16 @@ const { Option } = Select;
 class Toolbar extends React.Component {
   static propTypes = {
     updateEntityModal: PropTypes.func.isRequired,
+    updateAwardList: PropTypes.func.isRequired,
     updateSearchCondition: PropTypes.func.isRequired,
     form: PropTypes.any.isRequired,
   };
 
   componentDidMount() {
-
+    const { DBInfo } = commonConf;
+    getData(DBInfo.storeName.award).then((res) => {
+      this.props.updateAwardList(res);
+    });
   }
 
   handleSearch = () => {

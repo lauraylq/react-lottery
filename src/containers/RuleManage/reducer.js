@@ -40,6 +40,7 @@ const initialState = fromJS({
     total: 100,
     current: 1,
   },
+  awardList: [],
 });
 
 function reducer(state = initialState, action) {

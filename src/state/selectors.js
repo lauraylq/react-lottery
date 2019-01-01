@@ -22,6 +22,11 @@ export const selectCurrentAward = createSelector(
   subState => subState.get('currentAward').toJS(),
 );
 
+export const selectAwardList = createSelector(
+  selectGlobal,
+  subState => subState.get('awardList').toJS(),
+);
+
 export const selectUserData = createSelector(
   selectGlobal,
   subState => subState.get('userData').toJS(),

@@ -66,7 +66,7 @@ class Main extends React.Component {
         });
         let objectStore;
         if (!window.db.objectStoreNames.contains('award')) {
-          objectStore = window.db.createObjectStore('award', { autoIncrement: true });
+          objectStore = window.db.createObjectStore('award', { keyPath: 'id', autoIncrement: true });
           objectStore.createIndex('award_name', 'award_name', { unique: true });
           objectStore.createIndex('award_content', 'award_content', { unique: false });
           objectStore.createIndex('award_num', 'award_num', { unique: false });

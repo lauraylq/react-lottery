@@ -80,12 +80,12 @@ export function clearObjectStore(storeName) {
 }
 
 // 更新数据
-export function updateData(storeName, obj) {
+export function updateData(storeName, key, obj) {
   return new Promise((resolve, reject) => {
     // 使用事务
     const transaction = window.db.transaction(storeName, 'readwrite');
     const objectStore = transaction.objectStore(storeName);
-    const request = objectStore.get(obj.key);
+    const request = objectStore.get(key);
     request.onsuccess = (event) => {
       objectStore.put(obj);
       resolve('success');

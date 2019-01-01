@@ -23,11 +23,12 @@ import { CREATE, EDIT } from 'utils/constants';
 import { injectIntl, intlShape } from 'react-intl';
 import commonMessages from 'utils/commonMessages';
 import commonConf from 'config/main.conf';
-import { insert, updateData } from 'utils/store';
+import { insert, updateData, getData } from 'utils/store';
 
 import { NAMESPACE } from '../constants';
 import { updateEntityModal, postCreateEntity, postEditEntity } from '../actions';
 import { selectEntityModal, selectEntityModalType } from '../selectors';
+import { updateAwardList } from '../../../state/actions';
 
 const withConnect = connectFactory(NAMESPACE);
 
@@ -46,6 +47,7 @@ function isModify(type) {
   { // 其实这里可以处理掉，当前每引入一个action,需要更新props绑定，更新PropsType，
     // 实际可以直接将action全量引入，但是出于对性能及规范开发的要求，这里仍然使用单独引入的方式；
     updateEntityModal,
+    updateAwardList,
     postCreateEntity,
     postEditEntity,
   },
@@ -61,6 +63,7 @@ class CreateAndEditModal extends React.PureComponent {
   static propTypes = {
     entityModal: PropTypes.object.isRequired,
     updateEntityModal: PropTypes.func.isRequired,
+    updateAwardList: PropTypes.func.isRequired,
     postCreateEntity: PropTypes.func.isRequired,
     postEditEntity: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
@@ -78,6 +81,9 @@ class CreateAndEditModal extends React.PureComponent {
       if (!err) {
         if (type === CREATE) {
           insert(DBInfo.storeName.award, values).then((res) => {
+            getData(DBInfo.storeName.award).then((res) => {
+              this.props.updateAwardList(res);
+            });
             this.props.updateEntityModal({
               type: CREATE,
               show: false,
@@ -85,8 +91,11 @@ class CreateAndEditModal extends React.PureComponent {
             });
           });
         } else if (type === EDIT) {
-          values.key = this.props.entityModal.data.key;
-          updateData(DBInfo.storeName.award, values).then((res) => {
+          values.id = this.props.entityModal.data.id;
+          updateData(DBInfo.storeName.award, values.id, values).then((response) => {
+            getData(DBInfo.storeName.award).then((res) => {
+              this.props.updateAwardList(res);
+            });
             this.props.updateEntityModal({
               type: EDIT,
               show: false,
