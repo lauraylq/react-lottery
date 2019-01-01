@@ -28,7 +28,6 @@ class RuleManage extends React.Component {
     return (
       <div>
         <Toolbar />
-        <UploadUserData />
         <Modal />
         <Table />
         <Modal />

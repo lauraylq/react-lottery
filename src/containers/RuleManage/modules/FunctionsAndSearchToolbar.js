@@ -32,7 +32,9 @@ import messages from '../messages';
 import { NAMESPACE } from '../constants';
 import { getDataList, updateEntityModal, updateSearchCondition } from '../actions';
 import { selectSearchCondition } from '../selectors';
-import { updateAwardList } from '../../../state/actions';
+import { updateAwardList, updateCurrentAward } from '../../../state/actions';
+import UploadUserData from './UploadUserData';
+import { selectCurrentAward, selectAwardList } from '../../../state/selectors';
 
 const withConnect = connectFactory(NAMESPACE);
 const { Option } = Select;
@@ -40,10 +42,13 @@ const { Option } = Select;
 @withConnect(
   state => ({
     searchCondition: selectSearchCondition(state),
+    currentAward: selectCurrentAward(state),
+    awardList: selectAwardList(state),
   }),
   {
     getDataList,
     updateEntityModal,
+    updateCurrentAward,
     updateAwardList,
     updateSearchCondition,
   },
@@ -53,6 +58,9 @@ class Toolbar extends React.Component {
   static propTypes = {
     updateEntityModal: PropTypes.func.isRequired,
     updateAwardList: PropTypes.func.isRequired,
+    updateCurrentAward: PropTypes.func.isRequired,
+    currentAward: PropTypes.object.isRequired,
+    awardList: PropTypes.array.isRequired,
     updateSearchCondition: PropTypes.func.isRequired,
     form: PropTypes.any.isRequired,
   };
@@ -80,11 +88,26 @@ class Toolbar extends React.Component {
     });
   }
 
+  handleChange = (value) => {
+    const { awardList } = this.props;
+    if (Array.isArray(awardList)) {
+      const currentAward = awardList.filter(item => item.key === value);
+      if (currentAward[0]) {
+        this.props.updateCurrentAward(currentAward[0]);
+      }
+    }
+  }
+
   render() {
+    const { currentAward, awardList } = this.props;
     return (
       <ToolbarContainer>
-        <FunctionButtonsContainer>
+        <FunctionButtonsContainer style={{ display: 'flex' }}>
           <Button type="primary" onClick={this.handleClickCreate}>创建规则</Button>
+          <UploadUserData />
+          <Select value={currentAward.key} placeholder="请选择当前抽奖项" style={{ width: 180, marginLeft: '10px' }} onChange={this.handleChange}>
+            { Array.isArray(awardList) && awardList.map(item => <Option key={item.key} value={item.key}>{item.award_name}</Option>) }
+          </Select>
         </FunctionButtonsContainer>
       </ToolbarContainer>);
   }

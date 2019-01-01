@@ -147,9 +147,9 @@ class DataTable extends React.PureComponent {
     const { loading, currentAward, awardList } = this.props;
     return (
       <div>
-        <Select value={currentAward.key} style={{ width: 120 }} onChange={this.handleChange}>
+        {/* <Select value={currentAward.key} style={{ width: 120 }} onChange={this.handleChange}>
           { Array.isArray(awardList) && awardList.map(item => <Option key={item.key} value={item.key}>{item.award_name}</Option>) }
-        </Select>
+        </Select> */}
         <TableContainer>
           <Table
             bordered
@@ -157,9 +157,10 @@ class DataTable extends React.PureComponent {
             columns={this.columns}
             dataSource={awardList}
             rowKey="key"
-            pagination={{
-              pageSize: 20,
-            }}
+            // pagination={{
+            //   pageSize: 20,
+            // }}
+            pagination={false}
           />
         </TableContainer>
       </div>

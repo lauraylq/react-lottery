@@ -10,6 +10,7 @@ import {
 import { createStructuredSelector } from 'reselect';
 import connectFactory from 'utils/connectFactory';
 import { updateUserData } from '../../../state/actions';
+import '../index.less';
 
 
 const withConnect = connectFactory('lottery');
@@ -68,8 +69,9 @@ class UploadUserData extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="upload-button">
         <input type="file" onChange={(event) => { this.importFun(event); }} />
+          上传员工信息
         <div id="demo"></div>
       </div>
     );
