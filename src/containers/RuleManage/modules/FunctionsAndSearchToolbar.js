@@ -11,9 +11,6 @@ import PropTypes from 'prop-types';
 
 import {
   Form,
-  Row,
-  Col,
-  Input,
   Button,
   Select,
 } from 'antd';
@@ -23,11 +20,8 @@ import { CREATE } from 'utils/constants';
 import ToolbarContainer from 'components/ToolbarContainer';
 import FunctionButtonsContainer from 'components/FunctionButtonsContainer';
 import { injectIntl, intlShape } from 'react-intl';
-import commonMessages from 'utils/commonMessages';
 import commonConf from 'config/main.conf';
 import { getData } from 'utils/store';
-
-import messages from '../messages';
 
 import { NAMESPACE } from '../constants';
 import { getDataList, updateEntityModal, updateSearchCondition } from '../actions';

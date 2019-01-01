@@ -15,7 +15,6 @@ import { NAMESPACE } from './constants';
 import reducer from './reducer';
 
 import Toolbar from './modules/FunctionsAndSearchToolbar';
-import UploadUserData from './modules/UploadUserData';
 import Table from './modules/DataTable';
 import Modal from './modules/CreateAndEditModal';
 

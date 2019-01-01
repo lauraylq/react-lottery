@@ -39,9 +39,6 @@ class Lottery extends React.Component {
     window.addEventListener('keydown', this.keyDown);
   }
 
-  componentWillReceiveProps(nextProps) {
-  }
-
   componentWillUnmount() {
     window.removeEventListener('keydown', this.keyDown);
   }
@@ -91,9 +88,7 @@ class Lottery extends React.Component {
       console.log(this.rollLen);
       // 若小于单次最大抽奖人数
       if (tempLast && tempLast < single_num) {
-        debugger;
         this.currentSingleNum = tempLast.toString();
-        console.log('this.currentSingleNum: ', this.currentSingleNum);
       }
 
       if (award_num <= currentAwardNum.length) {
@@ -180,7 +175,7 @@ class Lottery extends React.Component {
   }
 
   render() {
-    const { currentAward, showResult } = this.props;
+    const { currentAward } = this.props;
     const { rollIdArr } = this.state;
     return (
       <div className="lottery-wrapper">
