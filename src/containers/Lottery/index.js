@@ -78,18 +78,20 @@ class Lottery extends React.Component {
   startScroll = () => {
     if (!this.isBegin) {
       const { currentAward, userData } = this.props;
-      const { resultArr } = this.state;
       const { award_num, single_num } = currentAward;
       this.currentSingleNum = single_num;
 
-      // 当前抽中数量
-      const tempLast = award_num - resultArr.length;
+      // 防止刷新页面后state重置，故重新获取
+      const resultNum = userData.filter(item => Number(item.award) === Number(currentAward.id));
+
+      // 当前剩余抽奖数
+      const tempLast = award_num - resultNum.length;
       // 若小于单次最大抽奖人数
       if (tempLast && tempLast < single_num) {
         this.currentSingleNum = tempLast.toString();
       }
 
-      if (award_num <= resultArr.length) {
+      if (award_num <= resultNum.length) {
         this.rollLen = 0;
         message.warning('本轮已抽取完毕');
         this.setState({
