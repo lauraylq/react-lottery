@@ -211,7 +211,7 @@ class Lottery extends React.Component {
               rollIdArr && rollIdArr.length === 10 && rollIdArr.map((item, index) => {
                 if (index % 2 === 1) {
                   return (
-                    <div style={{ height: '6vh', lineHeight: '6vh' }}>
+                    <div style={{ height: '6vh', lineHeight: '1vh' }}>
                       <div className={`result-style-${rollIdArr.length}`} key={rollIdArr[index - 1].id}>
                         <span className="result-name">{`${rollIdArr[index - 1].name}`}</span>
                         <span>{`${rollIdArr[index - 1].id}`}</span>
