@@ -6,12 +6,12 @@ import {
 
 import { createStructuredSelector } from 'reselect';
 import connectFactory from 'utils/connectFactory';
-import { updateData } from 'utils/store';
+import { updateData, getData } from 'utils/store';
 import screenshot from 'utils/screenshot';
 import commonConf from 'config/main.conf';
 import { selectCurrentAward, selectUserData } from '../../state/selectors';
+import { updateUserData } from '../../state/actions';
 import './index.less';
-
 
 const withConnect = connectFactory('lottery');
 @withConnect(
@@ -28,11 +28,13 @@ const withConnect = connectFactory('lottery');
   }),
   { // 其实这里可以处理掉，当前每引入一个action,需要更新props绑定，更新PropsType，
     // 实际可以直接将action全量引入，但是出于对性能及规范开发的要求，这里仍然使用单独引入的方式；
+    updateUserData,
   },
 )
 class Lottery extends React.Component {
   state = {
     rollIdArr: [], // 当前抽中集合
+    resultArr: [], // 当前抽中所有结果
     showResult: false,
   };
 
@@ -47,6 +49,7 @@ class Lottery extends React.Component {
   static propTypes = {
     currentAward: PropTypes.object.isRequired,
     userData: PropTypes.array.isRequired,
+    updateUserData: PropTypes.func.isRequired,
   };
 
   isBegin = false;
@@ -74,24 +77,24 @@ class Lottery extends React.Component {
   // 1.开始滚动
   startScroll = () => {
     if (!this.isBegin) {
-      this.setState({
-        showResult: false,
-      });
       const { currentAward, userData } = this.props;
+      const { resultArr } = this.state;
       const { award_num, single_num } = currentAward;
       this.currentSingleNum = single_num;
 
       // 当前抽中数量
-      const currentAwardNum = userData.filter(item => Number(item.award) === Number(this.props.currentAward.id));
-      const tempLast = award_num - currentAwardNum.length;
+      const tempLast = award_num - resultArr.length;
       // 若小于单次最大抽奖人数
       if (tempLast && tempLast < single_num) {
         this.currentSingleNum = tempLast.toString();
       }
 
-      if (award_num <= currentAwardNum.length) {
+      if (award_num <= resultArr.length) {
         this.rollLen = 0;
         message.warning('本轮已抽取完毕');
+        this.setState({
+          showResult: false,
+        });
         return false;
       }
       // 抽奖池内剩余人数
@@ -100,7 +103,7 @@ class Lottery extends React.Component {
       if (!this.currentSingleNum) {
         return false;
       }
-      if (tempRoll <= this.currentSingleNum) {
+      if (tempRoll < this.currentSingleNum) {
         message.warning(`池内剩余总数${tempRoll}，不够本次抽取${this.currentSingleNum}！`);
         return false;
       }
@@ -155,20 +158,24 @@ class Lottery extends React.Component {
   // 1.停止滚动
   stopScroll = () => {
     if (this.isBegin) {
+      const { currentAward } = this.props;
       clearInterval(this.timeInterJS);
       // 设置抽中人奖项并同步至indexDB
       this.rollIdArr.map((item) => {
-        item.award = this.props.currentAward.key;
+        item.award = currentAward.id;
         const { DBInfo } = commonConf;
-        updateData(DBInfo.storeName.user, item.id, item).then((res) => {
-          console.log(res);
+        updateData(DBInfo.storeName.user, item.id, item).then((response) => {
+          getData(DBInfo.storeName.user).then((res) => {
+            this.props.updateUserData(res);
+            const resultArr = res.filter(item1 => Number(item1.award) === Number(currentAward.id));
+            this.setState({
+              showResult: true,
+              resultArr,
+            });
+          });
         });
         this.rollLen += this.state.rollIdArr.length;
       });
-      this.setState({
-        showResult: true,
-      });
-      const { currentAward } = this.props;
       if (commonConf.download.show) {
         setTimeout(() => {
           screenshot(currentAward.award_name, currentAward.award_num);
@@ -180,7 +187,7 @@ class Lottery extends React.Component {
 
   render() {
     const { currentAward } = this.props;
-    const { rollIdArr } = this.state;
+    const { rollIdArr, resultArr } = this.state;
     return (
       <div className="lottery-wrapper">
         <div className="lottery-main">
@@ -198,32 +205,22 @@ class Lottery extends React.Component {
           </div>
         </div>
         <div className="lottery-result" style={{ display: this.state.showResult ? 'block' : 'none' }}>
-          <div className="lottery-result-text">
+          <div className="lottery-result-text" style={{ lineHeight: resultArr.length >= 5 ? '3vh' : '', width: resultArr.length >= 5 ? '80vh' : '' }}>
             {
-              rollIdArr && rollIdArr.length < 10 && rollIdArr.map(item => (
-                <div className={`result-style-${rollIdArr.length}`} key={item.id}>
+              resultArr && resultArr.length < 5 && resultArr.map(item => (
+                <div className={`result-style-${resultArr.length}`} key={item.id}>
                   <span className="result-name">{ `${item.name}`}</span>
                   <span>{ `${item.id}`}</span>
                 </div>
               ))
             }
             {
-              rollIdArr && rollIdArr.length === 10 && rollIdArr.map((item, index) => {
-                if (index % 2 === 1) {
-                  return (
-                    <div style={{ height: '6vh', lineHeight: '1vh' }}>
-                      <div className={`result-style-${rollIdArr.length}`} key={rollIdArr[index - 1].id}>
-                        <span className="result-name">{`${rollIdArr[index - 1].name}`}</span>
-                        <span>{`${rollIdArr[index - 1].id}`}</span>
-                      </div>
-                      <div className={`result-style-${rollIdArr.length}`} key={item.id}>
-                        <span className="result-name">{`${item.name}`}</span>
-                        <span>{`${item.id}`}</span>
-                      </div>
-                    </div>);
-                }
-                return '';
-              })
+              resultArr && resultArr.length >= 5 && resultArr.map(item => (
+                <div className="result-style-10" key={item.id}>
+                  <span className="result-name">{`${item.name}`}</span>
+                  <span>{`${item.id}`}</span>
+                </div>
+              ))
             }
           </div>
         </div>

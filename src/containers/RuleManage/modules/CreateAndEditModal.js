@@ -28,7 +28,7 @@ import { insert, updateData, getData } from 'utils/store';
 import { NAMESPACE } from '../constants';
 import { updateEntityModal, postCreateEntity, postEditEntity } from '../actions';
 import { selectEntityModal, selectEntityModalType } from '../selectors';
-import { updateAwardList } from '../../../state/actions';
+import { updateAwardList, updateCurrentAward } from '../../../state/actions';
 
 const withConnect = connectFactory(NAMESPACE);
 
@@ -48,6 +48,7 @@ function isModify(type) {
     // 实际可以直接将action全量引入，但是出于对性能及规范开发的要求，这里仍然使用单独引入的方式；
     updateEntityModal,
     updateAwardList,
+    updateCurrentAward,
     postCreateEntity,
     postEditEntity,
   },
@@ -64,6 +65,7 @@ class CreateAndEditModal extends React.PureComponent {
     entityModal: PropTypes.object.isRequired,
     updateEntityModal: PropTypes.func.isRequired,
     updateAwardList: PropTypes.func.isRequired,
+    updateCurrentAward: PropTypes.func.isRequired,
     postCreateEntity: PropTypes.func.isRequired,
     postEditEntity: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
@@ -96,6 +98,7 @@ class CreateAndEditModal extends React.PureComponent {
             getData(DBInfo.storeName.award).then((res) => {
               this.props.updateAwardList(res);
             });
+            this.props.updateCurrentAward({});
             this.props.updateEntityModal({
               type: EDIT,
               show: false,

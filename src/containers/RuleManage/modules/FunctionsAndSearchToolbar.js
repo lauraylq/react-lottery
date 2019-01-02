@@ -16,6 +16,7 @@ import {
 } from 'antd';
 
 import connectFactory from 'utils/connectFactory';
+import { Link } from 'react-router-dom';
 import { CREATE } from 'utils/constants';
 import ToolbarContainer from 'components/ToolbarContainer';
 import FunctionButtonsContainer from 'components/FunctionButtonsContainer';
@@ -102,6 +103,7 @@ class Toolbar extends React.Component {
           <Select value={currentAward.key} placeholder="请选择当前抽奖项" style={{ width: 180, marginLeft: '10px' }} onChange={this.handleChange}>
             { Array.isArray(awardList) && awardList.map(item => <Option key={item.key} value={item.key}>{item.award_name}</Option>) }
           </Select>
+          <Button style={{ marginLeft: '10px', border: 'none', fontWeight: 'bold' }}><Link to="lottery"> 点我去抽奖</Link></Button>
         </FunctionButtonsContainer>
       </ToolbarContainer>);
   }
