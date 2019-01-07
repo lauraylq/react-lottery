@@ -9,8 +9,8 @@ module.exports = merge(config, {
 
   // Utilize long-term caching by adding content hashes (not compilation hashes) to compiled assets
   output: {
-    filename: 'static/[name].[chunkhash].js',
-    chunkFilename: 'static/[name].[chunkhash].chunk.js',
+    filename: '[name].[chunkhash].js',
+    chunkFilename: '[name].[chunkhash].chunk.js',
   },
 
   plugins: [

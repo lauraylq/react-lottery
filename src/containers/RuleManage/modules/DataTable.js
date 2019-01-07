@@ -121,6 +121,9 @@ class DataTable extends React.PureComponent {
         <TableButton onClick={() => this.handleClickEdit(row)}>
           修改规则
         </TableButton>
+        {/* <TableButton onClick={() => this.handleClickEdit(row)}>
+          重新抽奖
+        </TableButton> */}
       </div>
     ),
   }];
@@ -131,6 +134,20 @@ class DataTable extends React.PureComponent {
       show: true,
       data,
     });
+  }
+
+  handleClearAward() {
+    // updateData(DBInfo.storeName.award, values.id, values).then((response) => {
+    //   getData(DBInfo.storeName.award).then((res) => {
+    //     this.props.updateAwardList(res);
+    //   });
+    //   this.props.updateCurrentAward({});
+    //   this.props.updateEntityModal({
+    //     type: EDIT,
+    //     show: false,
+    //     data: {},
+    //   });
+    // });
   }
 
   handleChange = (value) => {

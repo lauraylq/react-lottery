@@ -27,26 +27,19 @@ const render = () => {
   );
 };
 
-if (module.hot) {
-  module.hot.accept(['utils/i18n', 'containers/Main'], () => {
-    ReactDOM.unmountComponentAtNode(rootElement);
-    render();
-  });
-
-  // Chunked polyfill for browsers without Intl support
-  if (!window.Intl) {
-    (new Promise((resolve) => {
-      resolve(import('intl'));
-    }))
-      .then(() => Promise.all([
-        import('intl/locale-data/jsonp/en.js'),
-        import('intl/locale-data/jsonp/zh.js'),
-      ]))
-      .then(() => render(translationMessages))
-      .catch((err) => {
-        throw err;
-      });
-  } else {
-    render(translationMessages);
-  }
+// Chunked polyfill for browsers without Intl support
+if (!window.Intl) {
+  (new Promise((resolve) => {
+    resolve(import('intl'));
+  }))
+    .then(() => Promise.all([
+      import('intl/locale-data/jsonp/en.js'),
+      import('intl/locale-data/jsonp/zh.js'),
+    ]))
+    .then(() => render(translationMessages))
+    .catch((err) => {
+      throw err;
+    });
+} else {
+  render(translationMessages);
 }

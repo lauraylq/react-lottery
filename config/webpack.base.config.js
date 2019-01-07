@@ -14,7 +14,7 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(process.cwd(), 'dist'),
-    publicPath: '/',
+    publicPath: './',
   },
   resolve: {
     alias: {
@@ -25,7 +25,7 @@ module.exports = {
       images: path.resolve(process.cwd(), 'src', 'images'),
       moment$: 'moment/moment.js',
     },
-    modules: ['node_modules', 'app'],
+    modules: ['node_modules', 'src'],
     extensions: ['.js', '.jsx', '.react.js'],
     mainFields: ['browser', 'jsnext:main', 'main'],
   },

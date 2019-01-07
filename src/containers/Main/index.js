@@ -8,7 +8,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { BrowserRouter, Route, Link } from 'react-router-dom';
+import { HashRouter, Route, Link } from 'react-router-dom';
 
 import commonConf from 'config/main.conf';
 import RuleManage from 'containers/RuleManage/Loadable';
@@ -103,7 +103,7 @@ class Main extends React.Component {
 
   render() {
     return (
-      <BrowserRouter>
+      <HashRouter>
         <div className="lottery-container">
           <Button type="primary" onClick={this.showDrawer}>
           </Button>
@@ -126,7 +126,7 @@ class Main extends React.Component {
           <Route path="/ruleManage" component={RuleManage} />
           <Route path="/resultManage" component={ResultManage} />
         </div>
-      </BrowserRouter>
+      </HashRouter>
     );
   }
 }
