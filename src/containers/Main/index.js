@@ -111,7 +111,6 @@ class Main extends React.Component {
             title="SFTC LOTTEY"
             placement="right"
             width="155"
-            style={{ background: 'rgb(222, 229, 241)' }}
             closable={false}
             onClose={this.onClose}
             visible={this.state.visible}
