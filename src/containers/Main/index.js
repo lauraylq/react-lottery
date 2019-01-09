@@ -15,6 +15,7 @@ import RuleManage from 'containers/RuleManage/Loadable';
 import ResultManage from 'containers/ResultManage/Loadable';
 import Lottery from 'containers/Lottery';
 import { getData } from 'utils/store';
+import 'utils/rem';
 import { Drawer, Button } from 'antd';
 import './index.less';
 
@@ -105,7 +106,7 @@ class Main extends React.Component {
     return (
       <HashRouter>
         <div className="lottery-container">
-          <Button type="primary" onClick={this.showDrawer}>
+          <Button type="primary" onClick={this.showDrawer} style={{ zIndex: '999' }}>
           </Button>
           <Drawer
             title="SFTC LOTTEY"

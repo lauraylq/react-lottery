@@ -9,22 +9,32 @@
     top: -3.1vh;
     transform: translate3d(-50%,0,0);
     z-index: 2;
+      @-webkit-keyframes test_anim{
+        0%{ background-position:0 0;}
+        100%{ background-position: -424.25rem 0;}
+      }
+      @keyframes test_anim{
+        0%{ background-position:0 0;}
+        100%{ background-position: -424.25rem 0;}
+      }
     .lottery-name {
       position: relative;
-      height: 22.5vh;
-      line-height: 19.5vh;
-      font-size: 8vh;
+      margin: 0 auto;
+      height: 3.87rem;
+      line-height: 3.9rem;
+      font-size: 1.4rem;
       font-weight: 600;
       color: black;
       text-align: center;
-      background: url('../../images/award_bkg.png') no-repeat center center;
-      background-size: contain;
-      background-position-x: center;
-      background-position-y: center;
+      width: 16.97rem;
+      background: url('../../images/award-ani.png') center center;
+      background-size:cover;
+      -webkit-animation:test_anim 1s steps(25, start) 0ms infinite alternate backwards;
+      animation:test_anim 1s steps(25, start) 0ms infinite normal backwards;
     }
     .lottery-roll {
       position: relative;
-      margin-top: -2.8vh;
+      margin-top: 1.2vh;
       height: 7.7vh;
       line-height: 7vh;
       color: black;
