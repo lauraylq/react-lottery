@@ -207,7 +207,7 @@ class Lottery extends React.Component {
           </div>
         </div>
         <div className="lottery-result" style={{ display: this.state.showResult ? 'block' : 'none' }}>
-          <div className="lottery-result-text" style={{ lineHeight: resultArr.length >= 5 ? '3vh' : '', width: resultArr.length >= 5 ? '80vh' : '' }}>
+          <div className="lottery-result-text" style={{ lineHeight: resultArr.length >= 5 ? '10vh' : '', width: resultArr.length >= 5 ? '126vh' : '' }}>
             {
               resultArr && resultArr.length < 5 && resultArr.map(item => (
                 <div className={`result-style-${resultArr.length}`} key={item.id}>
