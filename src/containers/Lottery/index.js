@@ -15,19 +15,11 @@ import './index.less';
 
 const withConnect = connectFactory('lottery');
 @withConnect(
-  // 可以使用者两种方式mapstatetoprops 但是推荐使用select的方式，经测会减少渲染次数，性能较好；
-  // (globalState, state) => ({
-  //   tableData: state.get('tableData').toJS(),
-  //   pagination: state.get('pagination').toJS(),
-  //   searchCondition: state.get('searchCondition').toJS(),
-  //   loading: globalState.getIn(['global', 'loading']),
-  // }),
   createStructuredSelector({
     currentAward: selectCurrentAward,
     userData: selectUserData,
   }),
-  { // 其实这里可以处理掉，当前每引入一个action,需要更新props绑定，更新PropsType，
-    // 实际可以直接将action全量引入，但是出于对性能及规范开发的要求，这里仍然使用单独引入的方式；
+  {
     updateUserData,
   },
 )
@@ -128,33 +120,28 @@ class Lottery extends React.Component {
   // 更新抽中集合
   updateAwardArr = () => {
     while (this.rollIdArr.length < this.currentSingleNum) {
-      const rnd = this.getRand();
       const { userData, currentAward } = this.props;
-      const obj = userData[rnd];
-      if (obj.award === '0' && !this.findInArr(this.rollIdArr, obj)) {
-        if (currentAward.sex === '0' || obj.sex === currentAward.sex) {
-          this.rollIdArr.push(obj);
-          this.setState({
-            rollIdArr: this.rollIdArr,
-          });
+      // 除去已抽奖人
+      const userDataleft = userData.filter(item => item.award === '0');
+      const rnd = this.getRand(userDataleft.length);
+      const obj = userDataleft[rnd];
+      if (obj) {
+        // 考虑并排显示N个人同时抽奖情况
+        if (!this.rollIdArr.find(item => item.id === obj.id)) {
+          if (currentAward.sex === '0' || obj.sex === currentAward.sex) {
+            this.rollIdArr.push(obj);
+            this.setState({
+              rollIdArr: this.rollIdArr,
+            });
+          }
         }
       }
     }
   }
 
-  // 除去已抽奖人
-  findInArr = (arr, obj) => {
-    for (let i = 0; i < arr.length; i++) {
-      if (arr[i].id === obj.id) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   // 随机比例返回抽取结果
-  getRand = () => {
-    return Math.floor(Math.random() * this.props.userData.length);
+  getRand = (param) => {
+    return Math.floor(Math.random() * param);
   }
 
   // 1.停止滚动
